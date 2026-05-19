@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF Producer Onboarding Checklist</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px 48px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 26px; font-weight: 800; color: #123559; margin-top: 6px; letter-spacing: -0.01em; }
+  .doc-sub { font-size: 12px; color: #999; margin-top: 4px; }
+
+  .status-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 6px 14px;
+    border-radius: 20px; border: 2px solid #123559;
+    color: #123559;
+  }
+
+  /* FARM INFO */
+  .farm-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .info-field label {
+    display: block;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #A9987A;
+    margin-bottom: 6px;
+  }
+  .info-field input {
+    width: 100%;
+    border: none; border-bottom: 1.5px solid #e0dbd2;
+    background: transparent;
+    font-size: 13px; font-weight: 600; color: #123559;
+    padding: 4px 0;
+    outline: none;
+    font-family: inherit;
+  }
+  .info-field input::placeholder { color: #ccc; font-weight: 400; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 10px; font-weight: 700; color: #999;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 6px; background: #e8e3dc; border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: #123559; border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  /* SECTIONS */
+  .section { margin-bottom: 28px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .section-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #123559; color: #fff;
+    font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 13px; font-weight: 800; color: #123559;
+    letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .section-complete .section-num { background: #2E8B4A; }
+  .section-complete .section-title { color: #2E8B4A; }
+
+  /* CHECKLIST ITEMS */
+  .checklist {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 13px 18px;
+    border-bottom: 1px solid #f0ede8;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: #faf8f5; }
+  .check-item.checked { background: #f6fbf7; }
+
+  .checkbox {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 2px solid #d0c8bc; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; transition: all 0.15s;
+  }
+  .check-item.checked .checkbox {
+    background: #2E8B4A; border-color: #2E8B4A;
+  }
+  .check-item.checked .checkbox::after {
+    content: "✓"; color: #fff; font-size: 11px; font-weight: 800;
+  }
+
+  .check-content { flex: 1; }
+  .check-label {
+    font-size: 13px; font-weight: 600; color: #353337; line-height: 1.4;
+  }
+  .check-item.checked .check-label {
+    color: #999; text-decoration: line-through;
+  }
+  .check-note {
+    font-size: 11px; color: #aaa; margin-top: 3px; line-height: 1.5;
+  }
+
+  /* GROUP HEADER inside checklist */
+  .check-group-header {
+    padding: 8px 18px 6px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #A9987A;
+    background: #fdf9f4;
+    border-bottom: 1px solid #f0ede8;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 0.06em; }
+  .footer-note { font-size: 10px; color: #ccc; }
+
+  /* SIGNATURE BLOCK */
+  .sign-block {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin-top: 32px;
+  }
+  .sign-field {
+    border-top: 1.5px solid #d0c8bc;
+    padding-top: 8px;
+  }
+  .sign-field label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #A9987A;
+  }
+
+  @media print {
+    body { padding: 24px; }
+    .check-item:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="brand">From The Farm · Producer Onboarding</div>
+      <div class="doc-title">Producer Setup Checklist</div>
+      <div class="doc-sub">Completed by the H&amp;J team for every new producer on the tech stack tier</div>
+    </div>
+    <div class="status-badge" id="status-badge">In Progress</div>
+  </div>
+</div>
+
+<!-- FARM INFO -->
+<div class="farm-info">
+  <div class="info-field">
+    <label>Farm Name</label>
+    <input type="text" placeholder="Three Sons Ranch">
+  </div>
+  <div class="info-field">
+    <label>Producer Name</label>
+    <input type="text" placeholder="John Smith">
+  </div>
+  <div class="info-field">
+    <label>Email</label>
+    <input type="text" placeholder="john@threesonsranch.com">
+  </div>
+  <div class="info-field">
+    <label>Phone</label>
+    <input type="text" placeholder="(435) 555-0100">
+  </div>
+  <div class="info-field">
+    <label>Date Started</label>
+    <input type="text" placeholder="MM/DD/YYYY">
+  </div>
+  <div class="info-field">
+    <label>Date Completed</label>
+    <input type="text" placeholder="MM/DD/YYYY">
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Overall Progress</span>
+    <span id="progress-text">0 of 35 complete</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- SECTION 1: DOMAIN & HOSTING -->
+<div class="section" id="section-1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Domain &amp; Hosting</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Domain purchased and registered</div>
+        <div class="check-note">e.g. threesonsranch.com — registered through H&amp;J, transferred to farmer on cancel</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Website hosting active</div>
+        <div class="check-note">WordPress hosting set up and connected to domain</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">WordPress installed and configured</div>
+        <div class="check-note">Plugins, security, backups, caching — all handled internally</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: EMAIL -->
+<div class="section" id="section-2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Farm Email</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Professional email address created</div>
+        <div class="check-note">e.g. info@threesonsranch.com — farmer receives all order + customer emails here</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Email connected to order notification system</div>
+        <div class="check-note">Order alerts and automated messages sent from this address</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: WEBSITE -->
+<div class="section" id="section-3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Farm Website</div>
+  </div>
+  <div class="checklist">
+    <div class="check-group-header">Pages</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Home page</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">About / Farm Story page</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Products page (links to FTF storefront)</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Blog page</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Contact page</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Privacy Policy page</div></div>
+    </div>
+
+    <div class="check-group-header">Copy &amp; Content</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farm name, tagline, and headline written</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farm story written</div>
+        <div class="check-note">Who you are, your values, how you raise your animals</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Product descriptions written for each SKU</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Press Kit &amp; Brand Assets</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Logo (primary + variations)</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Brand colors and fonts defined</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Farmer headshot</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Farm lifestyle photography</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Product photography</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Mobile display verified</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: FTF STOREFRONT -->
+<div class="section" id="section-4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">FTF Storefront</div>
+  </div>
+  <div class="checklist">
+    <div class="check-group-header">Account &amp; Profile</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">FTF Pro account active ($50/mo)</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Custom storefront subdomain configured</div>
+        <div class="check-note">e.g. shop.threesonsranch.com</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farm profile complete — logo, bio, location</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Products</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">All products created with variants and weights</div>
+        <div class="check-note">Whole, half, quarter — each with correct pricing</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Product photos uploaded</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Opening inventory quantities set</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Shipping</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Shipping zones configured</div>
+        <div class="check-note">States farmer will ship to</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Ship days set</div>
+        <div class="check-note">Days of week farmer ships orders</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Ships Cold toggle enabled (USPS blocked)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: PAYMENTS -->
+<div class="section" id="section-5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">Payments</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Stripe account created and verified</div>
+        <div class="check-note">Farmer's identity verified, business info complete</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Bank account connected</div>
+        <div class="check-note">Payouts deposited directly to farmer's bank</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Stripe connected to FTF storefront</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: ORDER NOTIFICATIONS -->
+<div class="section" id="section-6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div class="section-title">Order Notifications</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer receives SMS alert on every order</div>
+        <div class="check-note">Includes customer name, items ordered, and shipping address</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer receives email alert on every order</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Customer receives order confirmation email</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: SHIPPING SETUP -->
+<div class="section" id="section-7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div class="section-title">Shipping Setup</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Shipping account set up with insurance</div>
+        <div class="check-note">ShipFare or UPS Capital — covers frozen meat shipments</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Box sizes and gel pack quantities identified</div>
+        <div class="check-note">Based on farmer's product weights — farmer procures all supplies</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Ship dates and zones confirmed with farmer</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Cold chain SOP guide delivered to farmer</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: FINAL TEST -->
+<div class="section" id="section-8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div class="section-title">Final Test &amp; Launch</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Test order placed end-to-end</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer received SMS + email notification</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Customer received order confirmation</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Inventory decremented correctly</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Payout flow confirmed</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer walkthrough complete — producer is live</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNATURE -->
+<div class="sign-block">
+  <div class="sign-field">
+    <label>Completed by</label>
+    <input type="text" placeholder="H&amp;J Team Member" style="border:none;border-bottom:1.5px solid #d0c8bc;width:100%;padding:8px 0 4px;font-size:13px;font-family:inherit;background:transparent;outline:none;">
+  </div>
+  <div class="sign-field">
+    <label>Date Completed</label>
+    <input type="text" placeholder="MM/DD/YYYY" style="border:none;border-bottom:1.5px solid #d0c8bc;width:100%;padding:8px 0 4px;font-size:13px;font-family:inherit;background:transparent;outline:none;">
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">FROM THE FARM · INTERNAL USE ONLY</div>
+  <div class="footer-note">Tech Stack Tier · $2,700/mo</div>
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.checked');
+    const pct = Math.round((done.length / all.length) * 100);
+
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = done.length + ' of ' + all.length + ' complete';
+
+    const badge = document.getElementById('status-badge');
+    if (pct === 100) {
+      badge.textContent = 'Complete ✓';
+      badge.style.background = '#2E8B4A';
+      badge.style.color = '#fff';
+      badge.style.borderColor = '#2E8B4A';
+    } else if (pct > 0) {
+      badge.textContent = 'In Progress';
+      badge.style.background = 'transparent';
+      badge.style.color = '#123559';
+      badge.style.borderColor = '#123559';
+    }
+  }
+</script>
+
+</body>
+</html>
