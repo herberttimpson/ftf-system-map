@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The 3-Order Rule — FTF</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 56px 56px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 34px; font-weight: 800; color: #123559; margin-top: 8px; letter-spacing: -0.02em; line-height: 1.1; }
+  .doc-sub { font-size: 15px; color: #777; margin-top: 10px; line-height: 1.5; max-width: 560px; }
+
+  /* INSIGHT BLOCK */
+  .insight {
+    background: #123559;
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 44px;
+  }
+  .insight-label { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #A9987A; margin-bottom: 10px; }
+  .insight-text { font-size: 17px; font-weight: 600; line-height: 1.6; }
+  .insight-sub { font-size: 13px; color: #94a3b8; margin-top: 10px; line-height: 1.6; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 44px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+  .stat-order {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A; margin-bottom: 10px;
+  }
+  .stat-pct {
+    font-size: 42px; font-weight: 800; color: #123559;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 12px; color: #888; line-height: 1.4; }
+  .stat-arrow {
+    position: absolute; right: -20px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px; color: #A9987A; font-weight: 800;
+    z-index: 1;
+  }
+
+  /* SECTION HEADER */
+  .section-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e8e3dc;
+  }
+
+  /* ORDER STEPS */
+  .steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 44px; }
+
+  .step {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 12px;
+    padding: 24px 24px;
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .step-left { text-align: center; }
+  .step-num {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: #123559; color: #fff;
+    font-size: 20px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+  }
+  .step-tag {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #A9987A;
+    display: block;
+  }
+
+  .step-title { font-size: 17px; font-weight: 800; color: #123559; margin-bottom: 6px; }
+  .step-desc { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px; }
+
+  .step-actions { display: flex; flex-direction: column; gap: 6px; }
+  .action {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12px; color: #444; line-height: 1.5;
+  }
+  .action-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #A9987A; flex-shrink: 0; margin-top: 5px;
+  }
+
+  .step-stat {
+    display: inline-block;
+    background: #EEF2FF; color: #1E3A8A;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px;
+    margin-top: 12px;
+  }
+
+  /* THE MATH */
+  .math-block {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 44px;
+  }
+  .math-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 13px; color: #444;
+  }
+  .math-row:last-child { border-bottom: none; }
+  .math-label { font-weight: 500; }
+  .math-value { font-weight: 800; color: #123559; }
+  .math-value.green { color: #2E8B4A; }
+  .math-value.gold { color: #D97706; }
+
+  /* KEY PRINCIPLE */
+  .principle {
+    background: #FDF9F0;
+    border: 1.5px solid #E9C46A;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 44px;
+  }
+  .principle-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #D97706; margin-bottom: 10px; }
+  .principle-text { font-size: 15px; font-weight: 700; color: #353337; line-height: 1.6; }
+
+  /* DTC VS RESTAURANT */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-bottom: 44px;
+  }
+  .compare-card {
+    background: #fff; border: 1.5px solid #e8e3dc;
+    border-radius: 10px; padding: 20px;
+  }
+  .compare-title { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #A9987A; margin-bottom: 12px; }
+  .compare-item {
+    font-size: 12px; color: #555; line-height: 1.6;
+    padding: 5px 0; border-bottom: 1px solid #f0ede8;
+  }
+  .compare-item:last-child { border-bottom: none; }
+  .compare-item strong { color: #123559; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 0.06em; }
+  .footer-note { font-size: 10px; color: #ccc; }
+
+  @media print {
+    body { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">From The Farm · Producer Playbook</div>
+  <div class="doc-title">The 3-Order Rule</div>
+  <div class="doc-sub">How farm-direct brands turn a first-time buyer into a loyal customer — and why the third order is the one that matters most.</div>
+</div>
+
+<!-- CORE INSIGHT -->
+<div class="insight">
+  <div class="insight-label">The Core Insight</div>
+  <div class="insight-text">Acquisition cost should never be measured by the first transaction alone. The real ROI is earned over the next three orders — and by the third, the customer is yours.</div>
+  <div class="insight-sub">Most farm-direct brands spend everything getting the first order and nothing keeping it. The 3-Order Rule flips that. A small, structured investment across three purchases creates a loyal customer who reorders for years.</div>
+</div>
+
+<!-- STATS -->
+<div class="section-label">DTC Retention Probability — After Each Order</div>
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-order">After Order 1</div>
+    <div class="stat-pct">27%</div>
+    <div class="stat-label">chance of a second purchase</div>
+    <div class="stat-arrow">→</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-order">After Order 2</div>
+    <div class="stat-pct">45%</div>
+    <div class="stat-label">chance of a third purchase</div>
+    <div class="stat-arrow">→</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-order">After Order 3</div>
+    <div class="stat-pct">62%</div>
+    <div class="stat-label">chance of a fourth purchase</div>
+  </div>
+</div>
+
+<!-- DTC VS RESTAURANT -->
+<div class="section-label">DTC vs. Restaurant — Key Differences</div>
+<div class="compare">
+  <div class="compare-card">
+    <div class="compare-title">Restaurant</div>
+    <div class="compare-item"><strong>Cycle:</strong> Days between visits</div>
+    <div class="compare-item"><strong>Incentive:</strong> Free appetizer, discount in the moment</div>
+    <div class="compare-item"><strong>Re-engagement:</strong> Walk back in</div>
+    <div class="compare-item"><strong>Impression:</strong> Staff, atmosphere, food</div>
+  </div>
+  <div class="compare-card">
+    <div class="compare-title">Farm Direct DTC</div>
+    <div class="compare-item"><strong>Cycle:</strong> Weeks or months between orders</div>
+    <div class="compare-item"><strong>Incentive:</strong> Discount on next order, free add-on</div>
+    <div class="compare-item"><strong>Re-engagement:</strong> Email + SMS sequence</div>
+    <div class="compare-item"><strong>Impression:</strong> The unboxing — this is your only moment</div>
+  </div>
+</div>
+
+<!-- 3 STEPS -->
+<div class="section-label">The 3-Order Framework — What to Do at Each Stage</div>
+<div class="steps">
+
+  <div class="step">
+    <div class="step-left">
+      <div class="step-num">1</div>
+      <span class="step-tag">Order 1</span>
+    </div>
+    <div>
+      <div class="step-title">Make It Unforgettable</div>
+      <div class="step-desc">The first order is your one chance to prove you're different from the grocery store. The unboxing IS the experience. A handwritten note from the farmer, a perfect pack, quality that exceeds expectations — this is your "red napkin" moment.</div>
+      <div class="step-actions">
+        <div class="action"><div class="action-dot"></div>Handwritten note from the farmer in the box</div>
+        <div class="action"><div class="action-dot"></div>Personalized thank-you email within 24hrs of delivery — in the farmer's voice</div>
+        <div class="action"><div class="action-dot"></div>Ask for feedback — make them feel like a partner, not a transaction</div>
+        <div class="action"><div class="action-dot"></div>Plant the seed for order 2 — introduce what's coming next season</div>
+      </div>
+      <span class="step-stat">27% will come back on their own — your job is to move that number</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-left">
+      <div class="step-num">2</div>
+      <span class="step-tag">Order 2</span>
+    </div>
+    <div>
+      <div class="step-title">Give Them a Reason to Return</div>
+      <div class="step-desc">Two weeks after delivery, they've eaten the product and the experience is fresh. This is the window. A targeted offer brings them back before the memory fades. Keep the incentive small — the product does the heavy lifting.</div>
+      <div class="step-actions">
+        <div class="action"><div class="action-dot"></div>Triggered email 14 days after delivery: "How was your order?" + offer</div>
+        <div class="action"><div class="action-dot"></div>Incentive: $25 off next order, free add-on (tallow, bone broth, specialty cut)</div>
+        <div class="action"><div class="action-dot"></div>SMS follow-up 3 days later if no action taken</div>
+        <div class="action"><div class="action-dot"></div>Introduce your story deeper — why you raise animals this way</div>
+      </div>
+      <span class="step-stat">Once they place order 2 — probability of order 3 jumps to 45%</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-left">
+      <div class="step-num">3</div>
+      <span class="step-tag">Order 3</span>
+    </div>
+    <div>
+      <div class="step-title">Lock the Habit</div>
+      <div class="step-desc">Order 3 is the tipping point. After this, 62% of customers continue buying without needing incentives. They've built a habit, they trust you, and they've told their friends. Your job now is to reward the loyalty and deepen the relationship.</div>
+      <div class="step-actions">
+        <div class="action"><div class="action-dot"></div>Exclusive offer or product — something not available to first-time buyers</div>
+        <div class="action"><div class="action-dot"></div>Invite them into a loyalty tier or early access list</div>
+        <div class="action"><div class="action-dot"></div>Ask for a referral — "Know a family who'd love this?"</div>
+        <div class="action"><div class="action-dot"></div>Flag as VIP in your CRM — treat them differently from here forward</div>
+      </div>
+      <span class="step-stat">62% will place a 4th order — without you having to ask</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- THE MATH -->
+<div class="section-label">The Math — Why This Works at Farm-Direct Price Points</div>
+<div class="math-block">
+  <div class="math-row">
+    <div class="math-label">Average order value (farm-direct)</div>
+    <div class="math-value">$250 – $2,500+</div>
+  </div>
+  <div class="math-row">
+    <div class="math-label">Total incentive cost across 3 orders</div>
+    <div class="math-value gold">~$25 – $50</div>
+  </div>
+  <div class="math-row">
+    <div class="math-label">Customer at order 3 — projected lifetime value (4+ orders)</div>
+    <div class="math-value green">$1,000 – $10,000+</div>
+  </div>
+  <div class="math-row">
+    <div class="math-label">Cost to acquire a new customer (paid ads, outreach)</div>
+    <div class="math-value gold">$30 – $150</div>
+  </div>
+  <div class="math-row">
+    <div class="math-label">Cost to retain a customer through order 3</div>
+    <div class="math-value green">$25 – $50 in incentives</div>
+  </div>
+</div>
+
+<!-- KEY PRINCIPLE -->
+<div class="principle">
+  <div class="principle-label">The Rule</div>
+  <div class="principle-text">The first order pays for itself. The second order covers your acquisition cost. The third order is where you start making money — and where the customer starts staying forever. Design your business around getting to order 3.</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">FROM THE FARM · PRODUCER PLAYBOOK</div>
+  <div class="footer-note">H&amp;J · May 2026</div>
+</div>
+
+</body>
+</html>
