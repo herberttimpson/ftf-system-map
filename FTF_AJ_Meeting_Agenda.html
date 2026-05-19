@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF — AJ Meeting Agenda</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 26px; font-weight: 800; color: #123559; margin-top: 6px; letter-spacing: -0.01em; }
+  .doc-meta { font-size: 12px; color: #999; margin-top: 4px; }
+  .header-right { text-align: right; }
+  .meeting-time {
+    font-size: 22px; font-weight: 800; color: #123559;
+  }
+  .meeting-date { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* GOAL BANNER */
+  .goal-banner {
+    background: #123559;
+    color: #fff;
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .goal-icon { font-size: 20px; flex-shrink: 0; }
+  .goal-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; margin-bottom: 4px; }
+  .goal-text { font-size: 14px; font-weight: 700; line-height: 1.4; }
+
+  /* SECTION */
+  .section { margin-bottom: 32px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-tag {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .tag-today { background: #123559; color: #fff; }
+  .tag-future { background: #e8e3dc; color: #888; }
+  .section-subtitle {
+    font-size: 11px; color: #aaa; font-weight: 500;
+  }
+
+  /* ITEMS */
+  .items { display: flex; flex-direction: column; gap: 10px; }
+
+  .item {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .item-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+  }
+  .num-today { background: #123559; color: #fff; }
+  .num-future { background: #f0ede8; color: #aaa; }
+
+  .item-title { font-size: 14px; font-weight: 700; color: #353337; margin-bottom: 4px; line-height: 1.3; }
+  .item-future .item-title { color: #888; }
+  .item-note { font-size: 12px; color: #aaa; line-height: 1.5; }
+
+  .item-bullets { margin-top: 8px; padding-left: 2px; }
+  .item-bullets li {
+    font-size: 12px; color: #666; line-height: 1.6;
+    list-style: none;
+    padding-left: 14px;
+    position: relative;
+  }
+  .item-bullets li::before {
+    content: "—";
+    position: absolute; left: 0;
+    color: #A9987A;
+  }
+
+  .owner-tag {
+    display: inline-block;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px; border-radius: 10px;
+    margin-top: 6px;
+  }
+  .owner-aj { background: #FFF3D6; color: #7A4800; }
+  .owner-hj { background: #E8EEFF; color: #1E3A8A; }
+  .owner-jared { background: #F0EAFF; color: #4A1A80; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 0.06em; }
+  .footer-note { font-size: 10px; color: #ccc; }
+
+  @media print {
+    body { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="brand">From The Farm · Internal</div>
+    <div class="doc-title">AJ Meeting Agenda</div>
+    <div class="doc-meta">Herbert &amp; Joseph · May 19, 2026</div>
+  </div>
+  <div class="header-right">
+    <div class="meeting-time">11:00 AM</div>
+    <div class="meeting-date">May 19, 2026</div>
+  </div>
+</div>
+
+<!-- GOAL -->
+<div class="goal-banner">
+  <div class="goal-icon">🎯</div>
+  <div>
+    <div class="goal-label">Meeting Goal</div>
+    <div class="goal-text">Get FTF campaigns launched and lock everything needed so H&amp;J is fully ready — waiting on AJ to send the first 3 pilot clients.</div>
+  </div>
+</div>
+
+<!-- TODAY PRIORITY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag tag-today">Today's Priority</div>
+    <div class="section-subtitle">Resolve before end of call</div>
+  </div>
+  <div class="items">
+
+    <div class="item">
+      <div class="item-num num-today">1</div>
+      <div>
+        <div class="item-title">FTF Campaigns — Launch Plan</div>
+        <ul class="item-bullets">
+          <li>Access to FTF Meta ad account for retargeting</li>
+          <li>Access to 40,000-person consumer email list</li>
+          <li>Confirm messaging direction — MAHA moms, "feed your family healthy"</li>
+          <li>Agree on launch timeline</li>
+        </ul>
+        <span class="owner-tag owner-aj">AJ to provide access</span>
+        <span class="owner-tag owner-hj">H&amp;J to build + launch</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-num num-today">2</div>
+      <div>
+        <div class="item-title">GHL Agency Admin Access</div>
+        <div class="item-note">Currently have Location Admin only on FTF's sub-account. Need Agency Admin to create and manage per-farm sub-accounts. Cannot onboard pilot clients without this.</div>
+        <span class="owner-tag owner-aj">AJ to grant today</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-num num-today">3</div>
+      <div>
+        <div class="item-title">GHL Field Names — Document the Variables</div>
+        <div class="item-note">SMS templates are referencing literal placeholders ("customer name") instead of real variables. Don't need to fix now — need a list of the actual GHL field names so templates can be corrected.</div>
+        <span class="owner-tag owner-aj">AJ / Jared to provide</span>
+        <span class="owner-tag owner-hj">H&amp;J to document</span>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-num num-today">4</div>
+      <div>
+        <div class="item-title">Inventory Upload Process</div>
+        <div class="item-note">How do farmers currently upload and manage inventory in FTF? Need to understand the current workflow before building any automation around it.</div>
+        <span class="owner-tag owner-aj">AJ to walk through</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FUTURE PRIORITY -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag tag-future">Future Priority</div>
+    <div class="section-subtitle">On the roadmap — not for today</div>
+  </div>
+  <div class="items">
+
+    <div class="item item-future">
+      <div class="item-num num-future">5</div>
+      <div>
+        <div class="item-title">Pilot Farms — 3 Producers Selected</div>
+        <div class="item-note">On hold until FTF campaigns are running. AJ to select 3 high-inventory producers when ready. Reminder only.</div>
+        <span class="owner-tag owner-aj">AJ to select</span>
+      </div>
+    </div>
+
+    <div class="item item-future">
+      <div class="item-num num-future">6</div>
+      <div>
+        <div class="item-title">Ongoing Client Checklist</div>
+        <div class="item-note">Setup checklist is complete. A second checklist covering ongoing monthly deliverables still needs to be built.</div>
+        <span class="owner-tag owner-hj">H&amp;J to build</span>
+      </div>
+    </div>
+
+    <div class="item item-future">
+      <div class="item-num num-future">7</div>
+      <div>
+        <div class="item-title">Secure Credential Delivery System</div>
+        <div class="item-note">Zero-knowledge system — farmer authenticates via SMS code, views credentials once, link self-destructs. No plaintext stored on H&amp;J servers. Required before first farmer is fully onboarded.</div>
+        <span class="owner-tag owner-hj">H&amp;J to build</span>
+      </div>
+    </div>
+
+    <div class="item item-future">
+      <div class="item-num num-future">8</div>
+      <div>
+        <div class="item-title">GHL Sub-Account Structure — Per-Farm Webhooks</div>
+        <div class="item-note">Does each farm get its own webhook URL, or does Jared route a single FTF webhook by farm ID? Must be resolved before scaling past one farm.</div>
+        <span class="owner-tag owner-jared">Jared to confirm</span>
+      </div>
+    </div>
+
+    <div class="item item-future">
+      <div class="item-num num-future">9</div>
+      <div>
+        <div class="item-title">Shipping School</div>
+        <div class="item-note">AJ is still building the course. H&amp;J to be invited when ready.</div>
+        <span class="owner-tag owner-aj">AJ in progress</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">FROM THE FARM · INTERNAL USE ONLY</div>
+  <div class="footer-note">H&amp;J · May 19, 2026</div>
+</div>
+
+</body>
+</html>
