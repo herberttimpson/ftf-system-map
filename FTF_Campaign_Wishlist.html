@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF — Campaign Wish List</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 26px; font-weight: 800; color: #123559; margin-top: 6px; letter-spacing: -0.01em; }
+  .doc-meta { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* LEGEND */
+  .legend {
+    display: flex; gap: 16px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: #666;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .dot-exists { background: #D97706; }
+  .dot-build { background: #123559; }
+  .dot-confirm { background: #aaa; }
+
+  /* SECTION */
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e8e3dc;
+  }
+
+  /* CAMPAIGN CARD */
+  .card {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .card.exists { border-left: 4px solid #D97706; }
+  .card.build { border-left: 4px solid #123559; }
+  .card.confirm { border-left: 4px solid #ccc; }
+
+  .card-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+  }
+  .num-exists { background: #FEF3C7; color: #92400E; }
+  .num-build { background: #123559; color: #fff; }
+  .num-confirm { background: #f0ede8; color: #aaa; }
+
+  .card-body { flex: 1; }
+  .card-title { font-size: 14px; font-weight: 700; color: #353337; margin-bottom: 4px; }
+  .card-why { font-size: 12px; color: #777; line-height: 1.6; }
+  .card-note {
+    font-size: 11px; font-weight: 700; color: #D97706;
+    margin-top: 6px;
+  }
+
+  .status-badge {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 4px 10px;
+    border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-exists { background: #FEF3C7; color: #92400E; border: 1.5px solid #F59E0B; }
+  .badge-build { background: #EEF2FF; color: #1E3A8A; border: 1.5px solid #93C5FD; }
+  .badge-confirm { background: #f0ede8; color: #aaa; border: 1.5px solid #e0dbd2; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 0.06em; }
+  .footer-note { font-size: 10px; color: #ccc; }
+
+  @media print {
+    body { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="brand">From The Farm · GHL Campaigns</div>
+    <div class="doc-title">Campaign Wish List</div>
+    <div class="doc-meta">H&amp;J Review · May 19, 2026</div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot dot-exists"></div> Already created — needs updated</div>
+  <div class="legend-item"><div class="legend-dot dot-build"></div> Recommended — needs to be built</div>
+  <div class="legend-item"><div class="legend-dot dot-confirm"></div> Confirm on call with AJ</div>
+</div>
+
+<!-- CONSUMER CAMPAIGNS -->
+<div class="section">
+  <div class="section-label">Consumer Campaigns</div>
+
+  <div class="card exists">
+    <div class="card-num num-exists">1</div>
+    <div class="card-body">
+      <div class="card-title">Welcome &amp; Nurture Sequence — New Subscribers</div>
+      <div class="card-why">The 40,000-person consumer list is confirmed underutilized. A 4–6 touch sequence introducing FTF, the mission, and a first purchase offer is the highest-leverage campaign available. Likely a basic version exists — needs a full rebuild around the MAHA mom audience.</div>
+      <div class="card-note">⚠ Already created — needs updated</div>
+    </div>
+    <div class="status-badge badge-exists">Needs Update</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">2</div>
+    <div class="card-body">
+      <div class="card-title">Post-Purchase — Win the Second Order</div>
+      <div class="card-why">First-time buyers are the most expensive to acquire. A 3-touch sequence after purchase (thank you → how your order ships → what to buy next) is the fastest path to improving repeat customer rate — a core FTF success metric.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card confirm">
+    <div class="card-num num-confirm">3</div>
+    <div class="card-body">
+      <div class="card-title">Cart Abandonment</div>
+      <div class="card-why">Consumer adds to cart, doesn't complete purchase. Automated 1hr + 24hr follow-up. High conversion rate, zero ad spend required. Standard GHL capability — likely already configured but needs verification.</div>
+      <div class="card-note">Confirm on call — likely exists</div>
+    </div>
+    <div class="status-badge badge-confirm">Confirm</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">4</div>
+    <div class="card-body">
+      <div class="card-title">New Farm in Your Area</div>
+      <div class="card-why">When a new producer goes live, notify consumers in their region. Drives immediate sales for new farms and makes the platform feel alive and growing. Gives every new producer a built-in audience on day one.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">5</div>
+    <div class="card-body">
+      <div class="card-title">Low Inventory / Last Chance</div>
+      <div class="card-why">"Only 2 beef shares left at Three Sons Ranch." Urgency trigger for high-consideration purchases. The MAHA mom audience responds strongly to scarcity on quality food — especially when it's tied to a farm they've already browsed.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">6</div>
+    <div class="card-body">
+      <div class="card-title">Back in Stock</div>
+      <div class="card-why">Consumers who viewed or previously bought from a farm get notified when inventory is restocked. Keeps buyers engaged between harvests and drives repeat purchases without any new acquisition cost.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">7</div>
+    <div class="card-body">
+      <div class="card-title">Seasonal Campaigns</div>
+      <div class="card-why">Thanksgiving, Christmas, Easter, 4th of July. Timed offers tied to when families are actively planning meals and thinking about food sourcing. This is exactly when the MAHA mom audience is most receptive — meets them in the moment.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">8</div>
+    <div class="card-body">
+      <div class="card-title">Re-engagement / Winback</div>
+      <div class="card-why">Consumers who haven't opened an email in 90+ days. One strong push before removing from list. Keeps the 40K list healthy, improves deliverability, and occasionally converts cold contacts back into buyers.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">9</div>
+    <div class="card-body">
+      <div class="card-title">Referral Campaign</div>
+      <div class="card-why">"Know a family who cares about where their food comes from?" Word-of-mouth is how the MAHA mom audience already shops. Give existing buyers a reason to share — lowest cost acquisition channel available.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">10</div>
+    <div class="card-body">
+      <div class="card-title">Newsletter / Blog Campaign</div>
+      <div class="card-why">Educational content — food sourcing, regenerative agriculture, farm stories, MAHA alignment. Builds trust with the consumer list between purchases and drives organic traffic via blog SEO. <em>Marketing activity.</em></div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+</div>
+
+<!-- PRODUCER CAMPAIGNS -->
+<div class="section">
+  <div class="section-label">Producer Campaigns</div>
+
+  <div class="card exists">
+    <div class="card-num num-exists">11</div>
+    <div class="card-body">
+      <div class="card-title">Warm Lead Re-engagement — 400 Dormant Producers</div>
+      <div class="card-why">400 producers signed up when the platform wasn't ready and went cold. A "Become a Producer" workflow exists with 64 contacts since December 2025 — but the 400 dormant leads are the most urgent opportunity. They already said yes. A 3-touch sequence can bring many back.</div>
+      <div class="card-note">⚠ Already created — needs updated + expanded to full 400-lead list</div>
+    </div>
+    <div class="status-badge badge-exists">Needs Update</div>
+  </div>
+
+  <div class="card exists">
+    <div class="card-num num-exists">12</div>
+    <div class="card-body">
+      <div class="card-title">New Producer Onboarding Sequence</div>
+      <div class="card-why">AJ is currently onboarding producers manually via phone calls. An automated sequence covering store setup, first product listing, and first sale shortens time-to-revenue and reduces AJ's workload at scale. A basic version likely exists — needs full rebuild aligned to H&amp;J's onboarding checklist.</div>
+      <div class="card-note">⚠ Already created — needs updated</div>
+    </div>
+    <div class="status-badge badge-exists">Needs Update</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">13</div>
+    <div class="card-body">
+      <div class="card-title">Producer Activation — Live But No Sales</div>
+      <div class="card-why">Producers who are live on the platform but have zero or very low sales. Check-in sequence: is your inventory current? Here's how to get your first order. Reduces platform churn and improves marketplace density.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">14</div>
+    <div class="card-body">
+      <div class="card-title">Producer Referral</div>
+      <div class="card-why">Existing producers refer other farmers. Farming communities are tight — peer referral is more powerful than any ad or cold outreach. AJ's 75% engagement rate on personal calls confirms this audience responds to personal relationships.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+  <div class="card build">
+    <div class="card-num num-build">15</div>
+    <div class="card-body">
+      <div class="card-title">Producer Success / Educational Drip</div>
+      <div class="card-why">Ongoing tips on shipping, pricing, photography, writing product descriptions, and maximizing sell-through rate. Positions FTF as a true partner in their success — not just a marketplace. Reduces churn and increases producer LTV.</div>
+    </div>
+    <div class="status-badge badge-build">Build</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">FROM THE FARM · INTERNAL USE ONLY</div>
+  <div class="footer-note">H&amp;J · May 19, 2026</div>
+</div>
+
+</body>
+</html>
