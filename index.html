@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF Farmer Journey — System Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f4f1ec;
+    color: #1a1a1a;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 40px 36px;
+    min-width: 1400px;
+  }
+
+  /* HEADER */
+  .header { margin-bottom: 32px; }
+  .header h1 { font-size: 24px; font-weight: 800; color: #1a1a1a; letter-spacing: -0.01em; }
+  .header p { font-size: 12px; color: #999; margin-top: 4px; }
+  .legend { display: flex; gap: 20px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+  .leg { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #555; }
+  .leg-dot { width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid rgba(0,0,0,0.15); flex-shrink:0; }
+  .tag { display: inline-block; font-size: 8px; font-weight: 700; border-radius: 3px; padding: 2px 6px; letter-spacing: 0.04em; }
+  .tag-done   { background: #e6f4ec; color: #2a7a48; border: 1px solid #a8d8bc; }
+  .tag-broken { background: #fdecea; color: #c0392b; border: 1px solid #f5b8b2; }
+  .tag-build  { background: #edf0fd; color: #3a5bc7; border: 1px solid #b4c0ef; }
+  .tag-todo   { background: #fef6e6; color: #b07a00; border: 1px solid #f0d08a; }
+
+  /* PHASE HEADERS */
+  .phases-header {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-left: 140px;
+    margin-bottom: 6px;
+    gap: 5px;
+  }
+  .phase-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #888;
+    text-align: center; padding: 8px 6px 6px;
+    border-bottom: 2.5px solid #ddd;
+    line-height: 1.4;
+  }
+  .phase-label span {
+    display: block; font-size: 8.5px; color: #bbb;
+    font-weight: 400; margin-top: 2px;
+    letter-spacing: 0; text-transform: none;
+  }
+
+  /* SWIM LANES — each row is self-contained: label + cells in one grid */
+  .swim-wrap { display: flex; flex-direction: column; }
+
+  .lane {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: stretch;
+    border-bottom: 2px solid #e8e3dc;
+  }
+  .lane:last-child { border-bottom: none; }
+
+  .lane-label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-self: stretch;
+    padding: 12px 14px 12px 10px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-right: 4px solid transparent;
+  }
+  .lane-label span { text-align: right; line-height: 1.7; }
+
+  /* Lane label colors — match their row */
+  .ll-farm  { background: #FFF3D6; border-right-color: #D4860A; color: #7A4800; }
+  .ll-ftf   { background: #E6F4EC; border-right-color: #2E8B4A; color: #1A5C30; }
+  .ll-hj    { background: #E8EEFF; border-right-color: #3A5BC7; color: #1E3A8A; }
+  .ll-ghl   { background: #F0EAFF; border-right-color: #7C4DCC; color: #4A1A80; }
+  .ll-cust  { background: #FFEEF2; border-right-color: #D43060; color: #8B1A30; }
+  .ll-log   { background: #E8FAFA; border-right-color: #1A9898; color: #0A5858; }
+
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+    padding: 6px;
+  }
+
+  /* CELLS */
+  .cell {
+    display: flex; flex-direction: column;
+    padding: 10px 10px;
+    border-radius: 7px;
+    min-height: 100px;
+  }
+  .cell.empty { background: transparent; min-height: 100px; }
+  .cell-title {
+    font-size: 10.5px; font-weight: 800; line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .item {
+    font-size: 9.5px; color: #555; line-height: 1.55;
+    padding-left: 10px; position: relative; margin-bottom: 2px;
+  }
+  .item::before { content: "·"; position: absolute; left: 2px; color: #bbb; }
+  .item.ok::before  { content: "✓"; color: #2a7a48; font-size: 8px; left: 1px; }
+  .item.bad::before { content: "✗"; color: #c0392b; font-size: 8px; left: 1px; }
+  .item.build::before { content: "⬡"; color: #3a5bc7; font-size: 8px; left: 0px; }
+  .tags { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 3px; }
+
+  /* LANE COLORS */
+  /* Farmer — amber */
+  .c-farm { background: #FFFBF0; border: 2px solid #E8A020; }
+  .c-farm .cell-title { color: #7A4800; }
+
+  /* FTF — green */
+  .c-ftf  { background: #F4FAF6; border: 2px solid #3D9A5C; }
+  .c-ftf  .cell-title { color: #1A5C30; }
+
+  /* H&J — blue */
+  .c-hj   { background: #F5F7FF; border: 2px solid #4A6CF7; }
+  .c-hj   .cell-title { color: #1E3A8A; }
+
+  /* H&J gate cell */
+  .c-hj-gate {
+    background: #f8f8f8; border: 2px dashed #ccc;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; min-height: 100px;
+    padding: 12px 10px; border-radius: 7px;
+  }
+  .gate-icon { font-size: 18px; margin-bottom: 6px; opacity: 0.3; }
+  .gate-label { font-size: 9px; color: #bbb; font-weight: 600; line-height: 1.5; }
+
+  /* Tier activation banner */
+  .tier-gate {
+    font-size: 8.5px; font-weight: 700; color: #1E3A8A;
+    background: #DCE4FF; border: 1px solid #4A6CF7;
+    border-radius: 4px; padding: 4px 8px; margin-bottom: 7px;
+    letter-spacing: 0.02em; text-align: center;
+  }
+
+  /* GHL — purple */
+  .c-ghl  { background: #F8F5FF; border: 2px solid #7C4DCC; }
+  .c-ghl  .cell-title { color: #4A1A80; }
+
+  /* Consumer — rose */
+  .c-cust { background: #FFF7F8; border: 2px solid #D43060; }
+  .c-cust .cell-title { color: #8B1A30; }
+
+  /* Logistics — teal */
+  .c-log  { background: #F2FBFB; border: 2px solid #1A9898; }
+  .c-log  .cell-title { color: #0A5858; }
+
+  /* Upgrade column shading */
+  .upgrade-col { background: #FDFAF2; }
+
+  /* SUMMARY */
+  .summary {
+    margin-top: 28px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-left: 140px;
+  }
+  .sum-card {
+    background: #fff; border: 1.5px solid #e0dbd2;
+    border-radius: 8px; padding: 16px 18px;
+  }
+  .sum-card h3 {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 10px;
+    padding-bottom: 8px; border-bottom: 1.5px solid #f0ede8;
+  }
+  .sum-card ul { list-style: none; }
+  .sum-card li {
+    font-size: 10px; color: #666; line-height: 1.8;
+    padding-left: 14px; position: relative;
+  }
+  .sum-card li::before { content: "→"; position: absolute; left: 0; color: #ccc; }
+  .sum-card li.ok::before  { content: "✓"; color: #2a7a48; }
+  .sum-card li.bad::before { content: "✗"; color: #c0392b; }
+  .sc1 h3 { color: #2a7a48; }
+  .sc2 h3 { color: #7a5200; }
+  .sc3 h3 { color: #c0392b; }
+  .sc4 h3 { color: #602890; }
+
+  /* Divider accent bar */
+  .lane-accent {
+    height: 3px; width: 100%;
+    margin-left: 130px;
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
+  }
+  .accent-cell { border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>FTF Farmer Journey — System Map</h1>
+  <p>Every phase of the farmer's journey · What FTF provides · What H&amp;J builds on top · Internal Use Only · May 2026</p>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:#FFFBF0;border-color:#E8A020;"></div>Farmer</div>
+    <div class="leg"><div class="leg-dot" style="background:#F4FAF6;border-color:#3D9A5C;"></div>FTF Platform</div>
+    <div class="leg"><div class="leg-dot" style="background:#F5F7FF;border-color:#4A6CF7;"></div>H&amp;J Tech Stack <span style="color:#bbb;">(only if farmer hires H&amp;J · phases 07–08 are upgrades)</span></div>
+    <div class="leg"><div class="leg-dot" style="background:#F8F5FF;border-color:#7C4DCC;"></div>GHL Automation</div>
+    <div class="leg"><div class="leg-dot" style="background:#FFF7F8;border-color:#D43060;"></div>Consumer</div>
+    <div class="leg"><div class="leg-dot" style="background:#f0fafa;border-color:#a0d8d8;"></div>Logistics</div>
+    &nbsp;
+    <span class="tag tag-done">✓ done</span>
+    <span class="tag tag-broken">✗ broken</span>
+    <span class="tag tag-build">⬡ H&J builds</span>
+    <span class="tag tag-todo">⬡ to decide</span>
+  </div>
+</div>
+
+<!-- PHASE HEADERS -->
+<div class="phases-header">
+  <div class="phase-label">01 · Acquisition<span>Farmer found &amp; qualified</span></div>
+  <div class="phase-label">02 · Onboarding<span>Full setup — store, site, payments</span></div>
+  <div class="phase-label">03 · Inventory<span>Product ready to sell</span></div>
+  <div class="phase-label">04 · Order<span>Consumer purchases</span></div>
+  <div class="phase-label">05 · Fulfillment<span>Pack, label, ship</span></div>
+  <div class="phase-label">06 · Post-Delivery<span>After it arrives</span></div>
+  <div class="phase-label" style="border-bottom-color:#e8c878;">07 · Marketing Basic<span style="color:#b07a00;font-weight:600;">⬆ Upgrade — not included by default</span></div>
+  <div class="phase-label" style="border-bottom-color:#e8c878;">08 · Growth<span style="color:#b07a00;font-weight:600;">⬆ Upgrade — not included by default</span></div>
+</div>
+
+<div class="swim-wrap">
+
+  <!-- ════════════════════════════════════ FARMER ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-farm"><span>Farmer</span></div>
+    <div class="cells">
+
+      <!-- 01 Acquisition -->
+      <div class="cell c-farm">
+        <div class="cell-title">Has product.<br>No channel.</div>
+        <div class="item">Selling locally or at farmers markets</div>
+        <div class="item">No online presence or website</div>
+        <div class="item">Can't reach national buyers</div>
+        <div class="item">No time or knowledge for marketing</div>
+      </div>
+
+      <!-- 02 Onboarding -->
+      <div class="cell c-farm">
+        <div class="cell-title">Gets set up<br>on FTF</div>
+        <div class="item">AJ onboards — store goes live at fromthefarm.org</div>
+        <div class="item">Adds products, photos, pricing manually</div>
+        <div class="item">Sets up Stripe on own</div>
+        <div class="item" style="margin-top:6px;color:#8a5c00;font-weight:600;">↓ If H&amp;J tier selected:</div>
+        <div class="item build">Provides photos + farm story to H&amp;J</div>
+        <div class="item build">Reviews + approves website, store</div>
+      </div>
+
+      <!-- 03 Inventory -->
+      <div class="cell c-farm">
+        <div class="cell-title">Returns from<br>processor</div>
+        <div class="item">Has product ready to sell</div>
+        <div class="item">Provides quantities + pricing to H&amp;J</div>
+        <div class="item" style="margin-top:4px;color:#8a5c00;font-weight:600;">↓ Base tier — farmer uploads manually</div>
+        <div class="item">Self-manages FTF catalog</div>
+      </div>
+
+      <!-- 04 Order -->
+      <div class="cell c-farm">
+        <div class="cell-title">Gets notified<br>of every order</div>
+        <div class="item">Receives SMS + email instantly</div>
+        <div class="item">Sees customer name, items, address</div>
+        <div class="item">Cut sheet submitted to processor if applicable</div>
+        <div class="tags"><span class="tag tag-broken">✗ SMS placeholder bug</span></div>
+      </div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-farm">
+        <div class="cell-title">Packs &amp;<br>ships order</div>
+        <div class="item">Selects box size + ice pack quantity</div>
+        <div class="item">Procures all shipping supplies</div>
+        <div class="item">Drops at carrier — never USPS for frozen</div>
+        <div class="item" style="margin-top:4px;color:#8a5c00;font-weight:600;">↓ If H&amp;J tier selected:</div>
+        <div class="item build">References H&amp;J SOP guide for cold chain</div>
+        <div class="item build">Prints label via shipping account H&amp;J set up</div>
+      </div>
+
+      <!-- 06 Post-Delivery -->
+      <div class="cell c-farm">
+        <div class="cell-title">Receives payout.<br>Gets feedback.</div>
+        <div class="item">Stripe direct deposit</div>
+        <div class="item">Sees review from customer</div>
+        <div class="item" style="margin-top:4px;color:#8a5c00;font-weight:600;">↓ If H&amp;J tier selected:</div>
+        <div class="item build">H&amp;J sends monthly performance report</div>
+      </div>
+
+      <!-- 07 Marketing Basic — UPGRADE -->
+      <div class="cell c-farm">
+        <div class="cell-title">Stays on the farm.<br>H&amp;J handles marketing.</div>
+        <div class="item">Self-manages social if base tier</div>
+        <div class="item" style="margin-top:4px;color:#8a5c00;font-weight:600;">↓ If marketing upgrade:</div>
+        <div class="item build">Provides content (photos, video clips)</div>
+        <div class="item build">Approves ad copy + campaigns</div>
+        <div class="item build">H&amp;J runs everything else</div>
+      </div>
+
+      <!-- 08 Growth — UPGRADE -->
+      <div class="cell c-farm">
+        <div class="cell-title">Plans next<br>processing run</div>
+        <div class="item">Uses sales data to size next run</div>
+        <div class="item">Adds new products / SKUs</div>
+        <div class="item">Expands shipping states</div>
+        <div class="item">Increases processing frequency</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ FTF PLATFORM ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-ftf"><span>FTF<br>Platform</span></div>
+    <div class="cells">
+
+      <!-- 01 Acquisition -->
+      <div class="cell c-ftf">
+        <div class="cell-title">AJ finds &amp;<br>qualifies farmer</div>
+        <div class="item">Personal outreach + Instagram funnel</div>
+        <div class="item">producers.fromthefarm.org</div>
+        <div class="item">Sunday call or direct phone sign-up</div>
+      </div>
+
+      <!-- 02 Onboarding -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Platform storefront<br>&amp; payment</div>
+        <div class="item">FTF-hosted storefront (fromthefarm.org)</div>
+        <div class="item">Storefront template (one design — no custom)</div>
+        <div class="item">Stripe / Revere payment processing</div>
+        <div class="item">Platform fee split retained by FTF</div>
+        <div class="item">Shipping zones configured</div>
+        <div class="item">Ships Cold toggle (blocks USPS)</div>
+        <div class="tags"><span class="tag tag-todo">⬡ Ships Cold — Brigham/Jared</span></div>
+      </div>
+
+      <!-- 03 Inventory -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Product catalog<br>management</div>
+        <div class="item">SKU / variant / weight management</div>
+        <div class="item">Qty tracking per product</div>
+        <div class="item">Auto-hides sold-out products</div>
+        <div class="tags"><span class="tag tag-broken">✗ sold-out still visible</span></div>
+      </div>
+
+      <!-- 04 Order -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Checkout &amp;<br>order creation</div>
+        <div class="item">Full payment processed at checkout</div>
+        <div class="item">Order appears in FTF backend</div>
+        <div class="item">Platform fee split calculated</div>
+        <div class="item">Webhook fires → GHL triggered</div>
+        <div class="item ok">Webhook fixed May 15</div>
+        <div class="tags"><span class="tag tag-broken">✗ confirm screen non-functional</span></div>
+      </div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Shipping training<br>&amp; carrier rules</div>
+        <div class="item">Qty auto-updates on each order</div>
+        <div class="item">AJ's Shipping School course</div>
+        <div class="item">Cold chain carrier enforcement</div>
+        <div class="item">USPS blocked when Ships Cold = ON</div>
+        <div class="item">Packaging vendor list (Brigham)</div>
+        <div class="tags"><span class="tag tag-todo">⬡ schedule Shipping School w/ AJ</span></div>
+      </div>
+
+      <!-- 06 Post-Delivery -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Farmer payout</div>
+        <div class="item">Stripe payout cycle to farmer</div>
+        <div class="item">Platform fee retained by FTF</div>
+      </div>
+
+      <!-- 07 Marketing Basic — UPGRADE -->
+      <div class="cell c-ftf">
+        <div class="cell-title">Marketplace<br>exposure</div>
+        <div class="item">Listed on fromthefarm.org</div>
+        <div class="item">Alongside 100 other farms</div>
+        <div class="item">1,500 organic sessions/mo to platform</div>
+        <div class="item">Individual farm pages rank in SEO</div>
+        <div class="item">Ty runs platform-level paid ads</div>
+        <div class="tags"><span class="tag tag-broken">✗ 0-sec sessions — creative mismatch</span></div>
+      </div>
+
+      <!-- 08 Growth — UPGRADE -->
+      <div class="cell c-ftf">
+        <div class="cell-title">FTF Enterprise<br>+ CMS integration</div>
+        <div class="item">Enterprise tier for top farmers</div>
+        <div class="item">cutmoremeat.com API (Brian)</div>
+        <div class="item">Live animal share inventory tracking</div>
+        <div class="item">Subscription model (not built yet)</div>
+        <div class="tags"><span class="tag tag-todo">⬡ AJ + Brian to connect</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ H&J TECH STACK ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-hj"><span>H&amp;J<br>Tech Stack<br><span style="font-size:7.5px;font-weight:400;letter-spacing:0;text-transform:none;opacity:0.7;">order · fulfill · ship · track</span></span></div>
+    <div class="cells">
+
+      <!-- 01 Acquisition — H&J not involved -->
+      <div class="cell empty"></div>
+
+      <!-- 02 Onboarding — Tier gate -->
+      <div class="cell c-hj">
+        <div class="tier-gate">🔑 Farmer selects &amp; hires H&amp;J tier — H&amp;J now active</div>
+        <div class="cell-title">Full farm setup —<br>H&amp;J handles everything</div>
+        <div class="item build">Build farm brand website — WordPress (farmer's own domain)
+          <div style="font-size:8.5px;color:#aaa;padding-left:4px;margin-top:2px;line-height:1.7;">
+            · Domain: Cloudflare Registrar (~$10/yr) — H&amp;J holds, transfers on cancel<br>
+            · Hosting: Namecheap or SiteGround (~$3–5/mo)<br>
+            · DNS managed through Cloudflare regardless of host
+          </div>
+        </div>
+        <div class="item build">Assist with copy — story, product descriptions, about</div>
+        <div class="item build">Set up FTF storefront — products, photos, pricing</div>
+        <div class="item build">Help farmer create + verify Stripe account</div>
+        <div class="item build">Configure payout schedule + bank connection</div>
+        <div class="item build">Create GHL sub-account for farm</div>
+        <div class="item build">Set up farm email domain
+          <div style="font-size:8.5px;color:#aaa;padding-left:4px;margin-top:2px;line-height:1.7;">
+            · Zoho Mail Lite — $1/mo · recommended<br>
+            · Google Workspace — $6/mo · familiar, pricey<br>
+            · Cloudflare routing + Gmail Send As — free · some caveats<br>
+            · Existing email — connect via SMTP if already set up
+          </div>
+        </div>
+        <div class="item build">Product photography shoot list + guidance</div>
+        <div class="tags"><span class="tag tag-build">⬡ H&J builds</span></div>
+      </div>
+
+      <!-- 03 Inventory — H&J handles if hired -->
+      <div class="cell c-hj">
+        <div class="cell-title">Inventory &amp;<br>catalog</div>
+        <div class="item build">Upload inventory to FTF after each processing run</div>
+        <div class="item build">Create + manage product catalog on FTF storefront</div>
+        <div class="item build">Set product descriptions, variants, weights, pricing</div>
+        <div class="tags"><span class="tag tag-build">⬡ H&J handles</span></div>
+      </div>
+
+      <!-- 04 Order -->
+      <div class="cell c-hj">
+        <div class="cell-title">Order &amp; webhook<br>verification</div>
+        <div class="item build">Ensure all webhooks fire correctly end-to-end</div>
+        <div class="item build">Test + verify all order flows in GHL</div>
+        <div class="item build">Fix SMS placeholder — correct variable</div>
+        <div class="item build">Order confirmation to farmer — full detail</div>
+        <div class="item build">No marketing emails — order flows only</div>
+        <div class="tags"><span class="tag tag-build">⬡ H&J verifies</span></div>
+      </div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-hj">
+        <div class="cell-title">Shipping setup &amp;<br>guidance</div>
+        <div class="item build">Shipping account setup — provider with insurance
+          <div style="font-size:8.5px;color:#aaa;padding-left:4px;margin-top:2px;line-height:1.7;">
+            · ShipFare — multi-carrier + insurance · recommended<br>
+            · UPS Capital — UPS-native insurance option
+          </div>
+        </div>
+        <div class="item build">Help farmer identify box sizes + gel packs if needed</div>
+        <div class="item build">Help farmer select shipping zones + ship dates</div>
+        <div class="item build">SOP reference guide — farmer procures all supplies</div>
+        <div class="tags"><span class="tag tag-build">⬡ H&J guides</span></div>
+      </div>
+
+      <!-- 06 Post-Delivery — not Tech Stack -->
+      <div class="cell empty"></div>
+
+      <!-- 07 Marketing Basic — UPGRADE -->
+      <div class="cell c-hj">
+        <div class="tier-gate">⬆ Farmer upgrades to marketing tier — separate from Tech Stack</div>
+        <div class="cell-title">Marketing Basic</div>
+        <div class="item build">SM accounts — farmer creates, grants H&amp;J access
+          <div style="font-size:8.5px;color:#aaa;padding-left:4px;margin-top:2px;line-height:1.7;">
+            · Facebook Page + Instagram owned by farmer<br>
+            · Farmer must be Page admin (FB policy)<br>
+            · Ask Joseph: include SM setup in marketing tier?
+          </div>
+        </div>
+        <div class="item build">Google Analytics 4 — traffic, conversions, behavior</div>
+        <div class="item build">Google Search Console — SEO monitoring + indexing</div>
+        <div class="item build">Google Business Profile — local search + maps listing</div>
+        <div class="item build">Pricing strategy — species, processing cost, market comps</div>
+        <div class="item build">Facebook / Meta cold traffic ads</div>
+        <div class="item build">Consumer retargeting campaigns</div>
+        <div class="item build">Bundle-specific landing pages</div>
+        <div class="item build">Consumer email list — farmer owns, H&amp;J manages</div>
+        <div class="item build">Social content calendar + posting</div>
+        <div class="item build">$2,700 avg order = trust-first funnel (5–7 touches)</div>
+        <div class="item build">Auto review request — 2–3 days post-delivery</div>
+        <div class="item build">Repeat purchase nudge — timed to consumption rate</div>
+        <div class="item build">Issue resolution flow — damaged package captured in GHL</div>
+        <div class="item build">Monthly performance report to farmer</div>
+        <div class="item build">Consumer LTV tracking per farm</div>
+      </div>
+
+      <!-- 08 Growth — UPGRADE -->
+      <div class="cell c-hj">
+        <div class="tier-gate">⬆ Growth tier — on top of marketing upgrade</div>
+        <div class="cell-title">Scale &amp;<br>analytics</div>
+        <div class="item build">Per-farm analytics dashboard — traffic, conversions, LTV</div>
+        <div class="item build">FTF category SEO pages ("grass-fed beef", "bison meat")</div>
+        <div class="item build">Proven ROAS → increase ad budget, expand states</div>
+        <div class="item build">New product launch campaigns</div>
+        <div class="item build">Referral program for bulk beef buyers</div>
+        <div class="item build">Upgrade path as farm revenue grows</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ GHL AUTOMATION ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-ghl"><span>GHL<br>Automation</span></div>
+    <div class="cells">
+
+      <!-- 01 Acquisition -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Become a<br>Producer workflow</div>
+        <div class="item ok">64 leads since Dec 2025</div>
+        <div class="item">Opt-in form → GHL contact created</div>
+        <div class="item">AJ notified of new lead</div>
+        <div class="item">Tagged + routed for follow-up</div>
+      </div>
+
+      <!-- 02 Onboarding -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Onboarding<br>sequence</div>
+        <div class="item">Welcome SMS + email on signup</div>
+        <div class="item">Setup checklist delivered automatically</div>
+        <div class="item">Sub-account created for farm</div>
+        <div class="item">Milestone check-ins during setup</div>
+        <div class="item build">If H&amp;J hired: 30-day nurture built by H&amp;J</div>
+      </div>
+
+      <!-- 03 Inventory — farmer's responsibility -->
+      <div class="cell empty"></div>
+
+      <!-- 04 Order -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Order notification<br>workflow</div>
+        <div class="item ok">Webhook fires on purchase (fixed 5/15)</div>
+        <div class="item">SMS + email triggered to farmer</div>
+        <div class="item bad">SMS "customer name" literal — not variable</div>
+        <div class="item build">Fix: correct GHL variable</div>
+        <div class="item build">Order confirmation email to consumer</div>
+      </div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Tracking &amp;<br>shipment flows</div>
+        <div class="item build">Farmer enters tracking # → GHL captures</div>
+        <div class="item build">Auto-sends tracking to consumer via SMS + email</div>
+        <div class="item build">Delivery window communicated</div>
+        <div class="item build">Fulfillment SOP delivered on first order</div>
+        <div class="tags"><span class="tag tag-build">⬡ H&J builds</span></div>
+      </div>
+
+      <!-- 06 Post-Delivery -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Post-delivery<br>sequence</div>
+        <div class="item build">Delivery confirmed → sequence fires</div>
+        <div class="item build">Day 2: review request (SMS + email)</div>
+        <div class="item build">Day 7: recipe / usage content</div>
+        <div class="item build">Day 90: repeat purchase nudge</div>
+        <div class="item build">Issue flag → farmer + H&amp;J notified</div>
+      </div>
+
+      <!-- 07 Marketing Basic — UPGRADE -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Consumer<br>nurture flows</div>
+        <div class="item build">Ad click → lead captured in GHL</div>
+        <div class="item build">5-touch email sequence before purchase</div>
+        <div class="item build">Retargeting audience synced from GHL</div>
+        <div class="item build">Farm-specific consumer list (farmer owns)</div>
+      </div>
+
+      <!-- 08 Growth — UPGRADE -->
+      <div class="cell c-ghl">
+        <div class="cell-title">Growth<br>dashboard</div>
+        <div class="item build">Per-farm pipeline in GHL</div>
+        <div class="item build">Revenue, LTV, repeat rate tracked</div>
+        <div class="item build">Monthly report auto-generated</div>
+        <div class="item build">Upgrade trigger when farm hits threshold</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ CONSUMER ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-cust"><span>Consumer</span></div>
+    <div class="cells">
+      <!-- 01 Acquisition -->
+      <div class="cell empty"></div>
+      <!-- 02 Onboarding -->
+      <div class="cell empty"></div>
+      <!-- 03 Inventory -->
+      <div class="cell empty"></div>
+
+      <!-- 04 Order -->
+      <div class="cell c-cust">
+        <div class="cell-title">High-consideration<br>purchase</div>
+        <div class="item">$2,500–$3,000 avg order</div>
+        <div class="item">Min order $2,500</div>
+        <div class="item">Needs 5–7 touchpoints first</div>
+        <div class="item">Selects cuts (cut sheet)</div>
+        <div class="item bad">Confirm screen broken post-purchase</div>
+      </div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-cust">
+        <div class="cell-title">Waits for<br>delivery</div>
+        <div class="item">Expects tracking info</div>
+        <div class="item bad">No tracking sent today</div>
+        <div class="item">Est. delivery window needed</div>
+      </div>
+
+      <!-- 06 Post-Delivery -->
+      <div class="cell c-cust">
+        <div class="cell-title">Receives order.<br>Leaves review.</div>
+        <div class="item">Fresh / frozen product arrives</div>
+        <div class="item">Review request hits Day 2</div>
+        <div class="item">Recipe content Day 7</div>
+        <div class="item">Becomes repeat buyer</div>
+      </div>
+
+      <!-- 07 Marketing Basic — UPGRADE -->
+      <div class="cell c-cust">
+        <div class="cell-title">Discovers<br>the farm</div>
+        <div class="item">SEO → farm product page</div>
+        <div class="item">Facebook ad → landing page</div>
+        <div class="item">fromthefarm.org marketplace browse</div>
+        <div class="item">AJ Instagram → click to farm</div>
+      </div>
+
+      <!-- 08 Growth — UPGRADE -->
+      <div class="cell c-cust">
+        <div class="cell-title">Loyal bulk<br>beef buyer</div>
+        <div class="item">Quarterly reorder</div>
+        <div class="item">Refers family + friends</div>
+        <div class="item">LTV = $8K–$12K+ over time</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════ LOGISTICS ROW ════════════════════════════════════ -->
+  <div class="lane">
+    <div class="lane-label ll-log"><span>Logistics</span></div>
+    <div class="cells">
+      <!-- 01-04 empty -->
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+
+      <!-- 05 Fulfillment -->
+      <div class="cell c-log">
+        <div class="cell-title">Carrier selection<br>enforced</div>
+        <div class="item">UPS or FedEx only for frozen</div>
+        <div class="item">Ships Cold = ON → USPS blocked</div>
+        <div class="item">Ground or 2-day based on distance</div>
+        <div class="item">Business accounts set up per farm</div>
+      </div>
+
+      <!-- 06 Post-Delivery -->
+      <div class="cell c-log">
+        <div class="cell-title">In transit →<br>delivered</div>
+        <div class="item">Tracking # generated at drop-off</div>
+        <div class="item">Cold chain integrity maintained</div>
+        <div class="item">Est. delivery window: 1–3 days</div>
+        <div class="item">Carrier confirms delivery</div>
+        <div class="item">Event triggers GHL post-delivery sequence</div>
+      </div>
+
+      <!-- 07-08 empty -->
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+
+    </div>
+  </div>
+
+</div><!-- /swim-wrap -->
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-card sc1">
+    <h3>✓ Working Now</h3>
+    <ul>
+      <li class="ok">Order webhook (fixed May 15)</li>
+      <li class="ok">100 farms live on platform</li>
+      <li class="ok">Farmer payout via Stripe</li>
+      <li class="ok">GHL Producer workflow (64 leads)</li>
+      <li class="ok">Carrier fix in progress (Brigham/Jared)</li>
+    </ul>
+  </div>
+  <div class="sum-card sc2">
+    <h3>H&amp;J Build Roadmap</h3>
+    <ul>
+      <li>Get Agency Admin access from AJ</li>
+      <li>Fix SMS "customer name" placeholder</li>
+      <li>Build farm brand website for each Tier 2 farmer</li>
+      <li>Set up FTF storefront, Stripe, socials for each farm</li>
+      <li>Inventory upload automation (GHL form → webhook)</li>
+      <li>Consumer order confirmation email</li>
+      <li>Tracking notification to consumer</li>
+      <li>Cold chain SOP document</li>
+      <li>Low-inventory alert workflow</li>
+      <li>Post-delivery review + repeat sequence</li>
+      <li>Producer Facebook retargeting + 30-day nurture</li>
+      <li>Category SEO pages at FTF level</li>
+    </ul>
+  </div>
+  <div class="sum-card sc3">
+    <h3>✗ Broken / Undefined</h3>
+    <ul>
+      <li class="bad">SMS notification — literal "customer name"</li>
+      <li class="bad">Order confirmation screen — broken</li>
+      <li class="bad">Sold-out farms still visible in marketplace</li>
+      <li class="bad">No tracking update sent to consumer</li>
+      <li class="bad">Inventory upload — fully manual</li>
+      <li class="bad">Shipping label process — undefined</li>
+      <li class="bad">Deposit vs. full-pay model — undefined</li>
+      <li class="bad">Cut sheet process — not automated</li>
+    </ul>
+  </div>
+  <div class="sum-card sc4">
+    <h3>Key Numbers</h3>
+    <ul>
+      <li>Avg consumer order: $2,500–$3,000</li>
+      <li>Minimum order: $2,500</li>
+      <li>100 farms live on platform</li>
+      <li>64 producer leads in GHL pipeline</li>
+      <li>1,500 organic sessions/mo to FTF</li>
+      <li>AJ Instagram: 297K followers</li>
+      <li>FTF Instagram: 38.4K followers</li>
+      <li>H&amp;J farmer target budget: ~$2K/mo</li>
+      <li>GHL Unlimited: $297/mo — unlimited sub-accts</li>
+    </ul>
+  </div>
+</div>
+
+<div style="margin-top:18px;margin-left:130px;font-size:10px;color:#ccc;">
+  Internal use only &nbsp;·&nbsp; H&amp;J operates as FTF internal team &nbsp;·&nbsp; AMA invisible to all farmers &nbsp;·&nbsp; May 2026
+</div>
+
+</body>
+</html>
