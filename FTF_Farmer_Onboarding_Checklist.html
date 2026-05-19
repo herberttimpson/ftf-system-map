@@ -229,37 +229,30 @@
 <div class="progress-wrap">
   <div class="progress-label">
     <span>Overall Progress</span>
-    <span id="progress-text">0 of 35 complete</span>
+    <span id="progress-text">0 of 0 complete</span>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 </div>
 
-<!-- SECTION 1: DOMAIN & HOSTING -->
+<!-- SECTION 1: DOMAIN -->
 <div class="section" id="section-1">
   <div class="section-header">
     <div class="section-num">1</div>
-    <div class="section-title">Domain &amp; Hosting</div>
+    <div class="section-title">Domain</div>
   </div>
   <div class="checklist">
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">Domain purchased and registered</div>
-        <div class="check-note">e.g. threesonsranch.com — registered through H&amp;J, transferred to farmer on cancel</div>
+        <div class="check-note">e.g. threesonsranch.com — registered through Cloudflare, held by H&amp;J, transferred to farmer on cancel (~$10/yr)</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Website hosting active</div>
-        <div class="check-note">WordPress hosting set up and connected to domain</div>
-      </div>
-    </div>
-    <div class="check-item" onclick="toggle(this)">
-      <div class="checkbox"></div>
-      <div class="check-content">
-        <div class="check-label">WordPress installed and configured</div>
-        <div class="check-note">Plugins, security, backups, caching — all handled internally</div>
+        <div class="check-label">DNS configured</div>
+        <div class="check-note">A records pointed to hosting, MX records pointed to email, CNAME for FTF storefront subdomain</div>
       </div>
     </div>
   </div>
@@ -269,21 +262,28 @@
 <div class="section" id="section-2">
   <div class="section-header">
     <div class="section-num">2</div>
-    <div class="section-title">Farm Email</div>
+    <div class="section-title">Email</div>
   </div>
   <div class="checklist">
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">Professional email address created</div>
-        <div class="check-note">e.g. info@threesonsranch.com — farmer receives all order + customer emails here</div>
+        <div class="check-note">e.g. info@threesonsranch.com — options: Zoho Mail Lite ($1/mo), Google Workspace ($6/mo), Outlook ($6/mo), or use existing</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Email connected to order notification system</div>
-        <div class="check-note">Order alerts and automated messages sent from this address</div>
+        <div class="check-label">Email send/receive tested</div>
+        <div class="check-note">Confirm inbox, reply-from, and spam filters working</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">SMTP credentials saved</div>
+        <div class="check-note">Server, port, username, password — needed to connect to GHL</div>
       </div>
     </div>
   </div>
@@ -296,38 +296,60 @@
     <div class="section-title">Farm Website</div>
   </div>
   <div class="checklist">
+    <div class="check-group-header">Hosting &amp; Setup</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Hosting account active and connected to domain</div>
+        <div class="check-note">Namecheap or SiteGround (~$3–5/mo)</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">WordPress installed and configured</div>
+        <div class="check-note">Theme, plugins, security, backups, caching — handled internally</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">SSL certificate active (https://)</div>
+      </div>
+    </div>
+
     <div class="check-group-header">Pages</div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">Home page</div></div>
+      <div class="check-content"><div class="check-label">Home</div></div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">About / Farm Story page</div></div>
+      <div class="check-content"><div class="check-label">About / Farm Story</div></div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">Products page (links to FTF storefront)</div></div>
+      <div class="check-content">
+        <div class="check-label">Products (links to FTF storefront)</div>
+      </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">Blog page</div></div>
+      <div class="check-content"><div class="check-label">Blog</div></div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">Contact page</div></div>
+      <div class="check-content"><div class="check-label">Contact</div></div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content"><div class="check-label">Privacy Policy page</div></div>
+      <div class="check-content"><div class="check-label">Privacy Policy</div></div>
     </div>
 
     <div class="check-group-header">Copy &amp; Content</div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content">
-        <div class="check-label">Farm name, tagline, and headline written</div>
-      </div>
+      <div class="check-content"><div class="check-label">Farm name, tagline, and headline written</div></div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
@@ -338,9 +360,7 @@
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
-      <div class="check-content">
-        <div class="check-label">Product descriptions written for each SKU</div>
-      </div>
+      <div class="check-content"><div class="check-label">Product descriptions written for each SKU</div></div>
     </div>
 
     <div class="check-group-header">Press Kit &amp; Brand Assets</div>
@@ -368,6 +388,16 @@
       <div class="checkbox"></div>
       <div class="check-content"><div class="check-label">Mobile display verified</div></div>
     </div>
+
+    <div class="check-group-header">SEO Basics</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Page titles and meta descriptions set</div></div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content"><div class="check-label">Google Search Console connected</div></div>
+    </div>
   </div>
 </div>
 
@@ -389,22 +419,22 @@
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">Custom storefront subdomain configured</div>
-        <div class="check-note">e.g. shop.threesonsranch.com</div>
+        <div class="check-note">e.g. shop.threesonsranch.com — DNS CNAME set in Cloudflare</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Farm profile complete — logo, bio, location</div>
+        <div class="check-label">Farm profile complete — logo, bio, location, story</div>
       </div>
     </div>
 
-    <div class="check-group-header">Products</div>
+    <div class="check-group-header">Products &amp; Inventory</div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">All products created with variants and weights</div>
-        <div class="check-note">Whole, half, quarter — each with correct pricing</div>
+        <div class="check-note">Whole, half, quarter, individual cuts — each with correct pricing per lb</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
@@ -416,11 +446,11 @@
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Opening inventory quantities set</div>
+        <div class="check-label">Opening inventory quantities entered</div>
       </div>
     </div>
 
-    <div class="check-group-header">Shipping</div>
+    <div class="check-group-header">Shipping Configuration</div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
@@ -431,14 +461,20 @@
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Ship days set</div>
-        <div class="check-note">Days of week farmer ships orders</div>
+        <div class="check-label">Ship days and order cutoff time set</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Ships Cold toggle enabled (USPS blocked)</div>
+        <div class="check-label">Ships Cold toggle enabled (blocks USPS)</div>
+        <div class="check-note">Required for all frozen meat — prevents USPS from appearing at checkout</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Storefront live and publicly visible</div>
       </div>
     </div>
   </div>
@@ -455,14 +491,14 @@
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">Stripe account created and verified</div>
-        <div class="check-note">Farmer's identity verified, business info complete</div>
+        <div class="check-note">Farmer's identity verified, business info complete, account active</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Bank account connected</div>
-        <div class="check-note">Payouts deposited directly to farmer's bank</div>
+        <div class="check-label">Bank account connected to Stripe</div>
+        <div class="check-note">Payouts deposit directly to farmer's account</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
@@ -471,75 +507,142 @@
         <div class="check-label">Stripe connected to FTF storefront</div>
       </div>
     </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Test charge processed and refunded</div>
+        <div class="check-note">Confirm funds flow correctly before going live</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- SECTION 6: ORDER NOTIFICATIONS -->
+<!-- SECTION 6: GHL -->
 <div class="section" id="section-6">
   <div class="section-header">
     <div class="section-num">6</div>
-    <div class="section-title">Order Notifications</div>
+    <div class="section-title">GHL (GoHighLevel)</div>
   </div>
   <div class="checklist">
+    <div class="check-group-header">Account Setup</div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Farmer receives SMS alert on every order</div>
-        <div class="check-note">Includes customer name, items ordered, and shipping address</div>
+        <div class="check-label">GHL sub-account created under FTF master</div>
+        <div class="check-note">Each farm gets its own sub-account — managed under H&amp;J's agency seat</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Farmer receives email alert on every order</div>
+        <div class="check-label">Farm email connected via SMTP</div>
+        <div class="check-note">All automated messages send from farmer's own email address (not GHL default)</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Customer receives order confirmation email</div>
+        <div class="check-label">Farmer's phone number added</div>
+        <div class="check-note">Required for SMS notification delivery</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">FTF webhook connected to GHL sub-account</div>
+        <div class="check-note">Webhook URL from GHL → sent to Jared → wired in FTF platform so order events fire</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Order Notification — Farmer</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer SMS workflow active</div>
+        <div class="check-note">Fires on every new order — includes customer name, items, and order number (verify no literal placeholders)</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer email notification active</div>
+        <div class="check-note">Full order details delivered to farmer's inbox on every purchase</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Order Confirmation — Customer</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Customer order confirmation email active</div>
+        <div class="check-note">Sent automatically after purchase — includes order summary and estimated ship date</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Customer shipping/tracking update active</div>
+        <div class="check-note">Triggered when farmer marks order shipped — sends tracking number to customer</div>
+      </div>
+    </div>
+
+    <div class="check-group-header">Delivery &amp; Credentials</div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">All workflows tested end-to-end</div>
+        <div class="check-note">Test order placed, all triggers confirmed firing, all messages received</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer login credentials delivered</div>
+        <div class="check-note">Farmer can log in and view incoming orders in their GHL dashboard</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SECTION 7: SHIPPING SETUP -->
+<!-- SECTION 7: SHIPPING -->
 <div class="section" id="section-7">
   <div class="section-header">
     <div class="section-num">7</div>
-    <div class="section-title">Shipping Setup</div>
+    <div class="section-title">Shipping</div>
   </div>
   <div class="checklist">
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Shipping account set up with insurance</div>
-        <div class="check-note">ShipFare or UPS Capital — covers frozen meat shipments</div>
+        <div class="check-label">Carrier account set up with insurance</div>
+        <div class="check-note">ShipFare or UPS Capital — covers high-value frozen meat shipments ($2,500+ orders)</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Box sizes and gel pack quantities identified</div>
-        <div class="check-note">Based on farmer's product weights — farmer procures all supplies</div>
+        <div class="check-label">Box sizes and gel pack quantities identified per SKU</div>
+        <div class="check-note">Based on product weights — farmer procures all packaging supplies</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Ship dates and zones confirmed with farmer</div>
+        <div class="check-label">Ship days, cutoff time, and zones confirmed with farmer</div>
+        <div class="check-note">Farmer decides — H&amp;J guides and documents the decision</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
         <div class="check-label">Cold chain SOP guide delivered to farmer</div>
+        <div class="check-note">Step-by-step pack and ship instructions — farmer's reference for every order</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SECTION 8: FINAL TEST -->
+<!-- SECTION 8: FINAL TEST & LAUNCH -->
 <div class="section" id="section-8">
   <div class="section-header">
     <div class="section-num">8</div>
@@ -549,7 +652,8 @@
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Test order placed end-to-end</div>
+        <div class="check-label">End-to-end test order placed</div>
+        <div class="check-note">Full purchase flow: storefront → checkout → Stripe → GHL webhook fires</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
@@ -561,25 +665,38 @@
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Customer received order confirmation</div>
+        <div class="check-label">Customer received order confirmation email</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Inventory decremented correctly</div>
+        <div class="check-label">Inventory decremented correctly in FTF</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Payout flow confirmed</div>
+        <div class="check-label">Payout flow confirmed in Stripe</div>
       </div>
     </div>
     <div class="check-item" onclick="toggle(this)">
       <div class="checkbox"></div>
       <div class="check-content">
-        <div class="check-label">Farmer walkthrough complete — producer is live</div>
+        <div class="check-label">Test order refunded / cancelled</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Farmer walkthrough complete</div>
+        <div class="check-note">Farmer knows how to view orders, update inventory, and contact H&amp;J for support</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-label">Producer is live ✓</div>
       </div>
     </div>
   </div>
@@ -630,6 +747,9 @@
       badge.style.borderColor = '#123559';
     }
   }
+
+  // Init count on load
+  updateProgress();
 </script>
 
 </body>
