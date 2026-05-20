@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF — Post-Call Follow-Up Sequence</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 28px; font-weight: 800; color: #123559; margin-top: 6px; letter-spacing: -0.01em; }
+  .doc-meta { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .flow-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A; margin-bottom: 16px;
+  }
+  .flow-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 10px; font-size: 13px; line-height: 1.6;
+  }
+  .flow-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  }
+  .icon-trigger { background: #e0f2fe; color: #0369a1; }
+  .icon-branch { background: #fef3c7; color: #92400e; }
+  .icon-exit { background: #dcfce7; color: #166534; }
+  .flow-arrow { color: #ccc; font-size: 18px; margin: 0 4px; }
+  .flow-indent { padding-left: 40px; border-left: 2px solid #e8e3dc; margin-left: 13px; margin-bottom: 8px; padding-top: 4px; padding-bottom: 4px; }
+  .tag-pill {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: #f0ede8; color: #666; padding: 2px 8px;
+    border-radius: 4px; font-family: monospace;
+  }
+  .note-pill {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: #fef3c7; color: #92400e; padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .section-badge {
+    font-size: 10px; font-weight: 700; padding: 4px 12px;
+    border-radius: 20px; text-transform: none; letter-spacing: 0;
+  }
+  .badge-noshow { background: #FEF3C7; color: #92400E; }
+  .badge-main { background: #123559; color: #fff; }
+
+  /* TOUCH CARDS */
+  .touchpoint { margin-bottom: 40px; }
+  .tp-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .tp-num {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+  }
+  .tp-timing {
+    font-size: 10px; font-weight: 700;
+    background: #f0ede8; color: #888;
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .tp-timing.noshow { background: #FEF3C7; color: #92400E; }
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .col-head {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 10px;
+    padding: 8px 12px; border-radius: 6px;
+  }
+  .col-head.personal { background: #EFF6FF; color: #1e40af; }
+  .col-head.platform { background: #F0FDF4; color: #166534; }
+
+  .copy-box {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 20px 22px;
+    font-size: 13px;
+    line-height: 1.85;
+    color: #353337;
+  }
+  .copy-box.personal { border-left: 4px solid #3b82f6; }
+  .copy-box.platform { border-left: 4px solid #22c55e; }
+  .copy-box.noshow-personal { border-left: 4px solid #f59e0b; }
+  .copy-box.noshow-platform { border-left: 4px solid #f59e0b; }
+
+  .subject {
+    font-size: 11px; font-weight: 700; color: #666;
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px; margin-bottom: 12px;
+  }
+  .tag-sms { background: #dcfce7; color: #166534; }
+  .tag-email { background: #dbeafe; color: #1e40af; }
+
+  .inline-note {
+    background: #FEF3C7; border-radius: 6px;
+    padding: 9px 13px; font-size: 11px;
+    color: #92400E; font-weight: 600; margin-top: 12px;
+  }
+
+  /* EXIT */
+  .exit-box {
+    background: #123559; color: #fff;
+    border-radius: 10px; padding: 24px 28px; margin-top: 48px;
+    font-size: 13px; line-height: 1.9;
+  }
+  .exit-box .exit-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A; margin-bottom: 12px;
+  }
+  code {
+    background: rgba(255,255,255,0.15);
+    padding: 2px 7px; border-radius: 4px; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">From The Farm — Working Doc · Not for distribution</div>
+  <div class="doc-title">Post-Call Follow-Up Sequence</div>
+  <div class="doc-meta">8 touches · 21 days · Attended + No-Show paths · Personal vs. Platform · 2026-05-19</div>
+</div>
+
+<!-- WORKFLOW LOGIC -->
+<div class="flow">
+  <div class="flow-title">Workflow Logic — How This Fires</div>
+
+  <div class="flow-row">
+    <div class="flow-icon icon-trigger">A</div>
+    <div><strong>Path A — Attended Sunday Call</strong><br>Tag <span class="tag-pill">attended-sunday-call</span> added after call → fires <strong>Touch 1</strong> immediately</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-icon icon-trigger">B</div>
+    <div><strong>Path B — AJ Personal Call</strong><br>AJ adds tag <span class="tag-pill">aj-called</span> to contact → fires <strong>Touch 1</strong> immediately</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-icon icon-trigger">C</div>
+    <div><strong>Path C — Registered, Did Not Attend</strong><br>No <span class="tag-pill">attended-sunday-call</span> tag by Monday morning → fires <strong>No-Show Bridge Touch</strong> first → then merges into Touch 1</div>
+  </div>
+
+  <div class="flow-row" style="margin-top:16px;">
+    <div class="flow-icon icon-branch">→</div>
+    <div><strong>Exit condition (any touch):</strong> Producer starts store setup → status moves to <span class="tag-pill">Draft</span> or <span class="tag-pill">In Review</span> → remove from sequence → enroll in <strong>Onboarding Setup sequence</strong></div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-icon icon-branch">→</div>
+    <div><strong>Two-door SMS (Touch 3):</strong> Clicks store link → exits sequence. Clicks calendar link → AJ closes personally, then exits sequence.</div>
+  </div>
+
+  <div style="margin-top:16px;padding:12px 16px;background:#f8f4ef;border-radius:8px;font-size:12px;color:#666;">
+    <span class="note-pill">Recording note</span>&nbsp; The No-Show bridge touch includes a link to the Sunday call recording. This requires AJ to save and share the Zoom recording each week — a Zoom auto-share link or unlisted YouTube upload both work. A standard link placeholder is used below: <strong>[Recording Link]</strong>
+  </div>
+</div>
+
+
+<!-- NO-SHOW BRIDGE TOUCH -->
+<div class="section-divider">
+  No-Show Bridge Touch — Path C Only
+  <span class="section-badge badge-noshow">Fires Monday after missed call</span>
+</div>
+
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">No-Show Bridge — Email</div>
+    <div class="tp-timing noshow">Monday after missed call</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box noshow-personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Missed you Sunday — here's the recording</div>
+        Hey [First Name],<br><br>
+        We missed you on the call Sunday night — totally understand, life gets busy.<br><br>
+        I saved the recording so you don't miss out. It's about 45 minutes and covers everything: how the platform works, what producers are seeing, and what getting started actually looks like.<br><br>
+        [Watch the Recording →]<br><br>
+        After you've had a chance to watch, if you're ready to get started just click here: [Start Your Store →]<br><br>
+        Or if you'd rather talk it through with me directly, grab some time here: [Calendar Link]<br><br>
+        Either way, I'll be in touch.<br><br>
+        — AJ Richards, From The Farm
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box noshow-platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: You missed the call — here's what was covered</div>
+        Hi [First Name],<br><br>
+        We didn't see you on Sunday's producer call — no problem at all.<br><br>
+        AJ recorded the full session so you can watch at your own pace. It covers how From The Farm works, what the platform does for producers, and what getting started looks like step by step.<br><br>
+        [Watch the Recording →]<br><br>
+        Ready to get started after watching? [Start Your Store →]<br><br>
+        Still have questions? Book a call with AJ directly: [Calendar Link]<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:10px 14px;background:#FEF3C7;border-radius:6px;font-size:11px;color:#92400E;font-weight:600;">
+    ⚑ After this touch fires, Path C merges into Touch 1 below. From Touch 1 onward, all three paths (A, B, C) run the identical sequence.
+  </div>
+</div>
+
+
+<!-- MAIN SEQUENCE -->
+<div class="section-divider">
+  Main Sequence — All Paths (A, B, C)
+  <span class="section-badge badge-main">8 touches · 21 days</span>
+</div>
+
+<!-- TOUCH 1 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 1 — Welcome &amp; First Step</div>
+    <div class="tp-timing">Immediately</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Really glad you made it</div>
+        Hey [First Name],<br><br>
+        Thanks for being on the call tonight. I mean that — the farmers who make time to show up are exactly the ones who do well on this platform.<br><br>
+        Here's what I'd love for you to do next: just start your producer profile. It takes about 10 minutes and it's the first real step toward getting your first order.<br><br>
+        [Start Your Store →]<br><br>
+        Any questions, reply here or text me directly. I check both.<br><br>
+        — AJ
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: You're in — here's your next step</div>
+        Hi [First Name],<br><br>
+        Thanks for joining the call. You now know how From The Farm works — the only thing left is to get started.<br><br>
+        Your next step is simple: start your producer profile. It takes about 10 minutes and puts you on the path to your first sale.<br><br>
+        [Start Your Store →]<br><br>
+        Questions? Reply to this email anytime.<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 2 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 2 — Why This Matters</div>
+    <div class="tp-timing">Day 2 · Email</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Why I built this</div>
+        Hey [First Name],<br><br>
+        I want to tell you something about why From The Farm exists.<br><br>
+        I got tired of watching good farmers — people raising real food the right way — get squeezed out by a system that doesn't value what they do. The grocery store takes their margin. The processor takes their story. The customer never even knows their name.<br><br>
+        This platform flips that. Your farm, your price, your relationship with the customer. Direct.<br><br>
+        The families buying through FTF aren't just buying food — they're choosing you specifically. That's a different kind of business. And it's one you can build.<br><br>
+        [First Name], your store is waiting. Let's get it started.<br><br>
+        [Start Your Store →]<br><br>
+        — AJ
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: The reason families buy direct from farms</div>
+        Hi [First Name],<br><br>
+        Consumers today don't just want food — they want to know where it came from, who raised it, and how.<br><br>
+        From The Farm exists to make that connection real. Every purchase on the platform is a family choosing a specific farm — yours — over a grocery store.<br><br>
+        That's not a trend. It's a shift. And the farms who get on the platform now are the ones who build a loyal customer base before everyone else does.<br><br>
+        Your store is one step away.<br><br>
+        [Start Your Store →]<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 3 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 3 — Two-Door Close</div>
+    <div class="tp-timing">Day 3 · SMS</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        Hey {{contact.first_name}}, thanks again for hopping on the call. Ready to get started? [Start Your Store →] — or if you've got more questions, grab some time with me here: [Calendar Link]
+        <div class="inline-note">Clicks store link → exits sequence. Clicks calendar link → AJ closes personally.</div>
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        Hi {{contact.first_name}}, thanks again for joining the From The Farm call. Ready to get started? [Start Your Store →] — still have questions? Book time with AJ: [Calendar Link]
+        <div class="inline-note">Clicks store link → exits sequence. Clicks calendar link → AJ closes personally.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 4 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 4 — Social Proof</div>
+    <div class="tp-timing">Day 8 · Email</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: What other farmers are seeing</div>
+        Hey [First Name],<br><br>
+        We have over 100 farms live on the platform right now. Some of them were exactly where you are a few months ago — skeptical, busy, not sure if it was worth the time.<br><br>
+        What I keep hearing from them: the first order is the hardest. After that, it starts to compound. Customers come back. They tell their friends. A family in your area that buys from you once will buy from you for years if the experience is right.<br><br>
+        That's what we're building toward with every farm that joins.<br><br>
+        You'd be a good fit for this. I know that from our conversation.<br><br>
+        [Start Your Store →]<br><br>
+        — AJ
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: 100+ farms. Here's what they have in common.</div>
+        Hi [First Name],<br><br>
+        From The Farm has over 100 farms live on the platform today.<br><br>
+        The ones seeing the best results share one thing: they got their store set up fast and started building their customer base early.<br><br>
+        Repeat customers are the backbone of a DTC farm business. The sooner you get your first order, the sooner that flywheel starts.<br><br>
+        Ready to be next?<br><br>
+        [Start Your Store →]<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 5 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 5 — Remove Friction</div>
+    <div class="tp-timing">Day 11 · SMS</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        Hey {{contact.first_name}}, AJ here. Getting your store set up is simpler than most people think — you just need a few product photos, your product list, and bank info for payouts. That's it. Start here: [Start Your Store →]
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        Hi {{contact.first_name}} — setting up your From The Farm store takes 3 things: product photos, your product list, and bank info for payouts. That's it. Start here: [Start Your Store →]
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 6 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 6 — Opportunity Cost</div>
+    <div class="tp-timing">Day 14 · Email</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Every week matters more than you think</div>
+        Hey [First Name],<br><br>
+        I don't want to pressure you — that's not what this is. But I do want to be honest with you.<br><br>
+        The farms who get set up in the first two weeks consistently outperform the ones who wait. Not because they're better farmers — because they started building their customer list earlier.<br><br>
+        Your area has families right now looking for exactly what you raise. They're on the platform. They just can't find you yet.<br><br>
+        Let's change that.<br><br>
+        [Start Your Store →]<br><br>
+        — AJ
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Families in your area are already shopping</div>
+        Hi [First Name],<br><br>
+        From The Farm has active buyers in most states — families actively looking for local farms to purchase from directly.<br><br>
+        When your store goes live, they can find you. Until then, they can't.<br><br>
+        The sooner you're live, the sooner your first order arrives.<br><br>
+        [Start Your Store →]<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 7 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 7 — Personal Ask</div>
+    <div class="tp-timing">Day 18 · SMS</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        {{contact.first_name}} — AJ here. Just checking in. Is there something holding you up? Happy to jump on a quick call and walk through it with you. Reply or grab time here: [Calendar Link]
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        Hi {{contact.first_name}} — From The Farm here. Is there anything stopping you from getting your store set up? AJ is available for a quick call: [Calendar Link]
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TOUCH 8 -->
+<div class="touchpoint">
+  <div class="tp-header">
+    <div class="tp-num">Touch 8 — Final Email</div>
+    <div class="tp-timing">Day 21 · Email</div>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Last note from me for a while</div>
+        Hey [First Name],<br><br>
+        I'm going to give you some space after this — I know you've got a farm to run and I don't want to be noise in your inbox.<br><br>
+        But before I do, I want to say this one more time: I think you'd be great on this platform. And I think the families in your area would be lucky to find you.<br><br>
+        Whenever you're ready — whether that's today or six months from now — just reply to this email or go to [Link] and we'll get you going.<br><br>
+        The door's always open.<br><br>
+        — AJ Richards, From The Farm
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: We'll be here when you're ready</div>
+        Hi [First Name],<br><br>
+        We won't keep filling your inbox — we know you're busy.<br><br>
+        But when you're ready to get your store set up, From The Farm will be here. Over 100 farms are already selling directly to families across the country. There's a spot for yours too.<br><br>
+        [Start Your Store →]<br><br>
+        Or book a call with AJ directly: [Calendar Link]<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- EXIT -->
+<div class="exit-box">
+  <div class="exit-label">Exit Condition — Sequence Ends Here</div>
+  Producer starts store setup → FTF platform status moves to <code>Draft</code> or <code>In Review</code><br>
+  GHL: Remove from this sequence → Enroll in <strong>Onboarding Setup sequence</strong><br><br>
+  This exit triggers at any point — Bridge Touch through Touch 8. The moment they start building, this sequence stops and the next one begins.<br><br>
+  <strong>What comes next:</strong> Onboarding Setup sequence — store build, first product listing, payments, shipping, and getting to Published status.
+</div>
+
+</body>
+</html>
