@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF — Sunday Call Copy Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 26px; font-weight: 800; color: #123559; margin-top: 6px; }
+  .doc-meta { font-size: 12px; color: #999; margin-top: 4px; }
+
+  .touchpoint {
+    margin-bottom: 48px;
+  }
+  .tp-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e8e3dc;
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .col-head {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+  .col-head.current { background: #f0ede8; color: #888; }
+  .col-head.personal { background: #EFF6FF; color: #1e40af; }
+  .col-head.platform { background: #F0FDF4; color: #166534; }
+
+  .copy-box {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #353337;
+    min-height: 120px;
+  }
+  .copy-box.current { border-left: 4px solid #ccc; }
+  .copy-box.personal { border-left: 4px solid #3b82f6; }
+  .copy-box.platform { border-left: 4px solid #22c55e; }
+  .copy-box.missing {
+    background: #FFF7ED;
+    border: 1.5px dashed #fed7aa;
+    color: #92400e;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .subject {
+    font-size: 11px; font-weight: 700;
+    color: #666; margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .tag-sms { background: #dcfce7; color: #166534; }
+  .tag-email { background: #dbeafe; color: #1e40af; }
+
+  .verdict {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #FEF3C7;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #92400E;
+    font-weight: 600;
+  }
+
+  .missing-row {
+    background: #FFF7ED;
+    border: 1.5px dashed #fed7aa;
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 12px;
+    color: #92400e;
+    margin-bottom: 10px;
+  }
+  .missing-row strong { color: #7c2d12; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">From The Farm — Internal Working Doc</div>
+  <div class="doc-title">Sunday Call Sequence — Copy Comparison</div>
+  <div class="doc-meta">Current vs. Personal (AJ's voice) vs. Platform (FTF branded) · 2026-05-19</div>
+</div>
+
+<!-- STRUCTURE NOTE -->
+<div style="background:#fff;border:1.5px solid #e8e3dc;border-radius:10px;padding:20px 24px;margin-bottom:36px;">
+  <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#A9987A;margin-bottom:12px;">Current Workflow Structure</div>
+  <div style="font-size:13px;line-height:1.9;color:#353337;">
+    <strong>Registration workflow:</strong> Form submitted → Add Tags → Create Opportunity → Assign User → Update Field → Wait 5 min → <strong>Email</strong> → <strong>SMS</strong> → Remove from Zap → Add to Workflow<br>
+    <strong>Reminders workflow:</strong> Set Sunday 6pm → Wait 4 hrs before → Math Op → <strong>Email</strong> → <strong>SMS 1</strong> → Wait 10 min → Branch (registered &gt;4x?) → <strong>SMS 2</strong> → Wait<br><br>
+    <span style="color:#b45309;font-weight:600;">⚠ No day-before reminder · No no-show follow-up · No Path B (AJ personal call bypass)</span>
+  </div>
+</div>
+
+
+<!-- TP1: REGISTRATION CONFIRMATION -->
+<div class="touchpoint">
+  <div class="tp-label">Touchpoint 1 — Registration Confirmation · Fires immediately on form submission</div>
+  <div class="cols">
+    <div>
+      <div class="col-head current">Current</div>
+      <div class="copy-box current missing">Copy not retrieved — inside Registration workflow.<br>Open to verify.</div>
+    </div>
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Hey [First Name] — glad you're here</div>
+        Hey [First Name],<br><br>
+        This is AJ from From The Farm. Just wanted to personally reach out and say — welcome. It means a lot that you're looking into what we're building here.<br><br>
+        Every Sunday night I hop on a call with producers who are considering joining the platform. No fluff, no sales pitch — just a real conversation about how it works and whether it's the right fit for your operation.<br><br>
+        [Date] at [Time] — [Zoom Link]<br><br>
+        If you can't make it, just reply and we'll find another time. Looking forward to talking.<br><br>
+        — AJ Richards, From The Farm
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: You're one step from joining From The Farm</div>
+        Hi [First Name],<br><br>
+        Thanks for your interest in From The Farm. The fastest way to get all your questions answered is our weekly producer call — AJ walks through the platform, how it works, and what producers like you are already seeing.<br><br>
+        Sunday at [Time] | [Zoom Link]<br><br>
+        See you there.<br><br>
+        — The From The Farm Team
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TP2: DAY-BEFORE SMS -->
+<div class="touchpoint">
+  <div class="tp-label">Touchpoint 2 — Day-Before SMS Reminder · Fires Saturday</div>
+  <div class="cols">
+    <div>
+      <div class="col-head current">Current</div>
+      <div class="copy-box current missing">Does not exist in current workflow.<br>No day-before reminder.</div>
+    </div>
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        Hey {{contact.first_name}}, AJ here. Just a heads up — producer call is tomorrow night at [Time]. Hope to see you there. [Zoom Link]
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        Hi {{contact.first_name}} — From The Farm producer call is tomorrow at [Time]. Join here: [Zoom Link]. Questions? Reply anytime.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TP3: DAY-OF EMAIL + SMS -->
+<div class="touchpoint">
+  <div class="tp-label">Touchpoint 3 — Day-Of Reminder · Email fires 4 hrs before · SMS fires 1 hr before</div>
+  <div class="cols">
+    <div>
+      <div class="col-head current">Current</div>
+      <div class="copy-box current">
+        <div class="tag tag-email">Email + SMS 1 (same copy)</div>
+        Hey {{contact.first_name}}, its From The Farm, don't forget about the call this evening! It will start at 5pm Pacific | 6pm Mountain | 7pm Central | 8pm Eastern.<br><br>
+        ZOOM LINK: {{contact.producer_call_registered_zoom_join_url}}
+        <div class="verdict">⚠ Email and SMS have identical copy. No warmth. No AJ voice. Functional but generic.</div>
+      </div>
+    </div>
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: See you tonight, [First Name]</div>
+        Hey [First Name] — just a reminder, we're on tonight at [Time]. Looking forward to it.<br><br>
+        [Zoom Link]<br><br>
+        — AJ
+        <br><br>
+        <div class="tag tag-sms">SMS (1 hr before)</div>
+        {{contact.first_name}} — call starts in an hour. Can't wait to connect. [Zoom Link]
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Tonight — From The Farm producer call</div>
+        Hi [First Name], the producer call is tonight at [Time]. AJ will walk you through everything.<br><br>
+        [Zoom Link]<br><br>
+        — The From The Farm Team
+        <br><br>
+        <div class="tag tag-sms">SMS (1 hr before)</div>
+        From The Farm producer call starts in 1 hour. Join here: [Zoom Link]
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TP3B: 10-MIN SMS -->
+<div class="touchpoint">
+  <div class="tp-label">Touchpoint 3B — 10-Minute SMS · Already exists, shown for completeness</div>
+  <div class="cols">
+    <div>
+      <div class="col-head current">Current</div>
+      <div class="copy-box current">
+        <div class="tag tag-sms">SMS 2 (10 min before)</div>
+        Hey {{contact.first_name}}, We'll be live in 10 minutes here's your zoom link: {{contact.producer_call_registered_zoom_join_url}}
+        <div class="verdict">✓ Good. Keep this one — it works.</div>
+      </div>
+    </div>
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        {{contact.first_name}} — we're live in 10. See you in there. [Zoom Link]
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        From The Farm call is live in 10 minutes. [Zoom Link]
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TP4: NO-SHOW FOLLOW-UP -->
+<div class="touchpoint">
+  <div class="tp-label">Touchpoint 4 — No-Show Follow-Up · Fires next day if they didn't attend</div>
+  <div class="cols">
+    <div>
+      <div class="col-head current">Current</div>
+      <div class="copy-box current missing">Does not exist.<br>No-shows currently get nothing.</div>
+    </div>
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: Missed you last night</div>
+        Hey [First Name],<br><br>
+        Missed you on the call — no worries, life gets busy.<br><br>
+        We run it every Sunday at [Time] if you want to hop on next week. Or if it's easier, just grab a time on my calendar and we'll talk one on one: [Calendar Link]<br><br>
+        Either way, I want to make sure you get what you need. Reply anytime with questions.<br><br>
+        — AJ
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-email">Email</div>
+        <div class="subject">Subject: We missed you — here's what to do next</div>
+        Hi [First Name],<br><br>
+        We missed you on Sunday's call. No worries — it runs every week.<br><br>
+        Next call: [Date] at [Time] — [Zoom Link]<br><br>
+        Prefer one-on-one? Book directly with AJ here: [Calendar Link]<br><br>
+        Looking forward to connecting.<br><br>
+        — From The Farm
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PATH B -->
+<div class="touchpoint">
+  <div class="tp-label">Path B — AJ Personal Call Bypass · Missing from current workflow entirely</div>
+  <div style="background:#fff;border:1.5px solid #e8e3dc;border-radius:10px;padding:20px 24px;">
+    <div style="font-size:13px;line-height:1.9;color:#353337;">
+      <strong>How it works:</strong> AJ calls a producer directly → they sign up on the call → AJ adds tag <code style="background:#f0ede8;padding:2px 6px;border-radius:4px;">aj-called</code> to their contact in GHL<br><br>
+      <strong>GHL logic needed:</strong> Tag <code style="background:#f0ede8;padding:2px 6px;border-radius:4px;">aj-called</code> added → <em>remove from Sunday Call sequence</em> → <em>enroll in Stage 4 (Post-Call sequence)</em><br><br>
+      <strong>Currently:</strong> No path exists. AJ's calls are a dead end — no automation fires, no follow-up, no pipeline movement.<br><br>
+      <span style="color:#b45309;font-weight:600;">⚠ This is the highest-priority fix. AJ's personal calls are his most effective channel and they're completely outside the system right now.</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- VERDICT -->
+<div style="background:#123559;color:#fff;border-radius:10px;padding:24px 28px;margin-top:48px;">
+  <div style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#A9987A;margin-bottom:12px;">Recommendation</div>
+  <div style="font-size:13px;line-height:1.9;">
+    <strong>Keep:</strong> The existing workflow structure (triggers, tags, opportunity creation). The bones are good.<br>
+    <strong>Keep:</strong> The 10-minute SMS (SMS 2) — functional as-is.<br>
+    <strong>Replace:</strong> Day-of email + SMS 1 copy with either Personal or Platform version.<br>
+    <strong>Add:</strong> Day-before SMS (Saturday).<br>
+    <strong>Add:</strong> No-show follow-up email (Monday).<br>
+    <strong>Add:</strong> Path B — <code style="background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;">aj-called</code> tag trigger → remove from sequence → enroll in Stage 4.<br>
+    <strong>Decide:</strong> Personal vs Platform tone. Choose one. Don't mix.
+  </div>
+</div>
+
+</body>
+</html>
