@@ -124,7 +124,7 @@
   <div style="font-size:13px;line-height:1.9;color:#353337;">
     <strong>Registration workflow:</strong> Form submitted → Add Tags → Create Opportunity → Assign User → Update Field → Wait 5 min → <strong>Email</strong> → <strong>SMS</strong> → Remove from Zap → Add to Workflow<br>
     <strong>Reminders workflow:</strong> Set Sunday 6pm → Wait 4 hrs before → Math Op → <strong>Email</strong> → <strong>SMS 1</strong> → Wait 10 min → Branch (registered &gt;4x?) → <strong>SMS 2</strong> → Wait<br><br>
-    <span style="color:#b45309;font-weight:600;">⚠ No day-before reminder · No no-show follow-up · No Path B (AJ personal call bypass)</span>
+    <span style="color:#b45309;font-weight:600;">⚠ No day-before reminder · No Path B (AJ personal call bypass) · No-show follow-up handled by Post-Call sequence</span>
   </div>
 </div>
 
@@ -265,39 +265,13 @@
 </div>
 
 
-<!-- TP4: NO-SHOW FOLLOW-UP -->
+<!-- TP4: NO-SHOW — HANDLED BY POST-CALL SEQUENCE -->
 <div class="touchpoint">
-  <div class="tp-label">Touchpoint 4 — No-Show Follow-Up · Fires next day if they didn't attend</div>
-  <div class="cols">
-    <div>
-      <div class="col-head current">Current</div>
-      <div class="copy-box current missing">Does not exist.<br>No-shows currently get nothing.</div>
-    </div>
-    <div>
-      <div class="col-head personal">Personal — AJ's Voice</div>
-      <div class="copy-box personal">
-        <div class="tag tag-email">Email</div>
-        <div class="subject">Subject: Missed you last night</div>
-        Hey [First Name],<br><br>
-        Missed you on the call — no worries, life gets busy.<br><br>
-        We run it every Sunday at [Time] if you want to hop on next week. Or if it's easier, just grab a time on my calendar and we'll talk one on one: [Calendar Link]<br><br>
-        Either way, I want to make sure you get what you need. Reply anytime with questions.<br><br>
-        — AJ
-      </div>
-    </div>
-    <div>
-      <div class="col-head platform">Platform — FTF Brand</div>
-      <div class="copy-box platform">
-        <div class="tag tag-email">Email</div>
-        <div class="subject">Subject: We missed you — here's what to do next</div>
-        Hi [First Name],<br><br>
-        We missed you on Sunday's call. No worries — it runs every week.<br><br>
-        Next call: [Date] at [Time] — [Zoom Link]<br><br>
-        Prefer one-on-one? Book directly with AJ here: [Calendar Link]<br><br>
-        Looking forward to connecting.<br><br>
-        — From The Farm
-      </div>
-    </div>
+  <div class="tp-label">No-Show Follow-Up · Moved to Post-Call Sequence (Stage 4)</div>
+  <div style="background:#F0FDF4;border:1.5px solid #bbf7d0;border-radius:10px;padding:18px 22px;font-size:13px;line-height:1.8;color:#166534;">
+    <strong>No-show handling has been consolidated into the Post-Call Follow-Up Sequence.</strong><br><br>
+    When a producer misses the Sunday call, the Post-Call sequence fires a No-Show Bridge touch Monday morning (includes recording link + two-door CTA), then rolls into the full 8-touch follow-up. No duplicate emails, cleaner experience.<br><br>
+    The Sunday Call sequence ends after the 10-minute SMS. No-show follow-up is not needed here.
   </div>
 </div>
 
@@ -324,8 +298,8 @@
     <strong>Keep:</strong> The 10-minute SMS (SMS 2) — functional as-is.<br>
     <strong>Replace:</strong> Day-of email + SMS 1 copy with either Personal or Platform version.<br>
     <strong>Add:</strong> Day-before SMS (Saturday).<br>
-    <strong>Add:</strong> No-show follow-up email (Monday).<br>
     <strong>Add:</strong> Path B — <code style="background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:4px;">aj-called</code> tag trigger → remove from sequence → enroll in Stage 4.<br>
+    <strong>Remove:</strong> No-show follow-up from this sequence — consolidated into the Post-Call sequence (Stage 4 No-Show Bridge).<br>
     <strong>Decide:</strong> Personal vs Platform tone. Choose one. Don't mix.
   </div>
 </div>
