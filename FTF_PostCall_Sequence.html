@@ -127,14 +127,14 @@
 <div class="header">
   <div class="brand">From The Farm — Internal Working Doc</div>
   <div class="doc-title">Post-Call Sequence — Stage 4</div>
-  <div class="doc-meta">Personal (AJ's voice) vs. Platform (FTF branded) · 7 touches · 21 days · 2026-05-19</div>
+  <div class="doc-meta">Personal (AJ's voice) vs. Platform (FTF branded) · 8 touches · 21 days · Updated 2026-05-19</div>
 </div>
 
 <div class="intro-box">
   <strong>Triggers:</strong> Producer attended Sunday call (Path A) OR AJ added tag <code style="background:#f0ede8;color:#666;padding:2px 6px;border-radius:4px;">aj-called</code> (Path B)<br>
   <strong>Goal:</strong> Move producer from "interested" → "building their store"<br>
   <strong>Exit condition:</strong> Producer starts store setup (status moves to Draft or In Review in FTF platform) → remove from this sequence → enroll in Onboarding Setup sequence<br>
-  <strong>CTA arc:</strong> Emotional connection early → practical steps mid → direct ask late
+  <strong>CTA arc:</strong> Emotional connection early → two-door SMS close Day 3 → practical steps mid → direct ask late
 </div>
 
 
@@ -175,11 +175,38 @@
 </div>
 
 
+<!-- TOUCH 1B - DAY 3 SMS -->
+<div class="touchpoint">
+  <div class="tp-label">
+    Touch 1B — Two-Door Close
+    <span class="tp-timing">Day 3 · SMS</span>
+  </div>
+  <div class="cols">
+    <div>
+      <div class="col-head personal">Personal — AJ's Voice</div>
+      <div class="copy-box personal">
+        <div class="tag tag-sms">SMS</div>
+        Hey {{contact.first_name}}, thanks again for hopping on the call. Ready to get started? [Start Your Store →] — or if you've got more questions, grab some time with me here: [Calendar Link]
+        <div class="cta-note">Two doors: self-serve link exits the sequence. Calendar link routes to AJ for a personal close.</div>
+      </div>
+    </div>
+    <div>
+      <div class="col-head platform">Platform — FTF Brand</div>
+      <div class="copy-box platform">
+        <div class="tag tag-sms">SMS</div>
+        Hi {{contact.first_name}}, thanks again for joining the From The Farm call. Ready to get started? [Start Your Store →] — or still have questions? Book a call with AJ directly: [Calendar Link]
+        <div class="cta-note">Two doors: self-serve link exits the sequence. Calendar link routes to AJ for a personal close.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- TOUCH 2 -->
 <div class="touchpoint">
   <div class="tp-label">
     Touch 2 — Why This Matters
-    <span class="tp-timing">Day 2</span>
+    <span class="tp-timing">Day 5</span>
   </div>
   <div class="cols">
     <div>
@@ -219,7 +246,7 @@
 <div class="touchpoint">
   <div class="tp-label">
     Touch 3 — Social Proof
-    <span class="tp-timing">Day 5</span>
+    <span class="tp-timing">Day 8</span>
   </div>
   <div class="cols">
     <div>
@@ -259,7 +286,7 @@
 <div class="touchpoint">
   <div class="tp-label">
     Touch 4 — Remove Friction (What You Actually Need)
-    <span class="tp-timing">Day 8 · SMS</span>
+    <span class="tp-timing">Day 11 · SMS</span>
   </div>
   <div class="cols">
     <div>
@@ -286,7 +313,7 @@
 <div class="touchpoint">
   <div class="tp-label">
     Touch 5 — The Opportunity Cost
-    <span class="tp-timing">Day 12</span>
+    <span class="tp-timing">Day 14</span>
   </div>
   <div class="cols">
     <div>
@@ -324,7 +351,7 @@
 <div class="touchpoint">
   <div class="tp-label">
     Touch 6 — The Personal Ask
-    <span class="tp-timing">Day 17 · SMS</span>
+    <span class="tp-timing">Day 18 · SMS</span>
   </div>
   <div class="cols">
     <div>
