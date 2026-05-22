@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FTF — Post-Call Sequence GHL Build Spec</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #FAF9F5;
+    color: #353337;
+    font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    padding: 48px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .header {
+    border-bottom: 3px solid #123559;
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  .brand { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #A9987A; }
+  .doc-title { font-size: 26px; font-weight: 800; color: #123559; margin-top: 6px; }
+  .doc-meta { font-size: 12px; color: #999; margin-top: 4px; }
+
+  /* SETUP BLOCK */
+  .setup-block {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+  }
+  .setup-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A; margin-bottom: 14px;
+  }
+  .setup-row {
+    display: flex; gap: 16px; margin-bottom: 8px;
+    font-size: 13px; line-height: 1.6;
+  }
+  .setup-key {
+    font-weight: 700; color: #888;
+    min-width: 130px; flex-shrink: 0;
+  }
+  code {
+    background: #f0ede8; padding: 2px 7px;
+    border-radius: 4px; font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+  code.link {
+    background: #dbeafe; color: #1e40af;
+    word-break: break-all;
+  }
+
+  /* STEP CARDS */
+  .step {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .step-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+  }
+  .num-action { background: #123559; color: #fff; }
+  .num-wait { background: #f0ede8; color: #888; }
+  .num-branch { background: #fef3c7; color: #92400e; }
+  .num-noshow { background: #fde68a; color: #92400e; }
+  .num-exit { background: #dcfce7; color: #166534; }
+
+  .step-title {
+    font-size: 13px; font-weight: 700; color: #353337;
+  }
+  .step-type {
+    margin-left: auto;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .type-email { background: #dbeafe; color: #1e40af; }
+  .type-sms { background: #dcfce7; color: #166534; }
+  .type-wait { background: #f0ede8; color: #888; }
+  .type-branch { background: #fef3c7; color: #92400e; }
+  .type-action { background: #f3e8ff; color: #6b21a8; }
+  .type-exit { background: #dcfce7; color: #166534; }
+
+  .step-body {
+    padding: 16px 20px;
+    font-size: 13px; line-height: 1.75;
+    color: #444;
+  }
+
+  /* COPY BLOCK */
+  .copy-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #A9987A;
+    margin: 14px 0 8px;
+  }
+  .copy-block {
+    background: #f8f4ef;
+    border-left: 3px solid #123559;
+    border-radius: 0 6px 6px 0;
+    padding: 14px 16px;
+    font-size: 13px; line-height: 1.85;
+    color: #353337;
+    white-space: pre-wrap;
+    font-family: inherit;
+  }
+  .copy-block.sms {
+    border-left-color: #22c55e;
+  }
+  .subj {
+    font-size: 11px; font-weight: 700;
+    color: #666; margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e8e3dc;
+  }
+
+  /* NOTES */
+  .note {
+    background: #FEF3C7;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11px; color: #92400E;
+    font-weight: 600; margin-top: 12px;
+  }
+  .note-green {
+    background: #dcfce7;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11px; color: #166534;
+    font-weight: 600; margin-top: 12px;
+  }
+
+  /* SECTION DIVIDER */
+  .section-div {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A9987A;
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #e8e3dc;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .section-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .badge-noshow { background: #FEF3C7; color: #92400E; }
+  .badge-main { background: #123559; color: #fff; }
+  .badge-setup { background: #f3e8ff; color: #6b21a8; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; margin-top: 8px; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; line-height: 1.6; margin-bottom: 6px;
+    color: #444;
+  }
+  .checklist li::before {
+    content: "☐";
+    flex-shrink: 0;
+    color: #123559;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+
+  /* INDENT */
+  .indent {
+    border-left: 2px solid #e8e3dc;
+    margin-left: 20px;
+    padding-left: 16px;
+    margin-top: 8px;
+  }
+
+  /* EXIT BOX */
+  .exit-box {
+    background: #123559; color: #fff;
+    border-radius: 10px; padding: 22px 26px;
+    margin-top: 40px; font-size: 13px; line-height: 1.9;
+  }
+  .exit-box .exit-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A; margin-bottom: 12px;
+  }
+  code.white {
+    background: rgba(255,255,255,0.15); color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">From The Farm — Internal Build Doc</div>
+  <div class="doc-title">Post-Call Follow-Up Sequence — GHL Build Spec</div>
+  <div class="doc-meta">Step-by-step GHL workflow build instructions · Personal voice (AJ's voice) · 2026-05-21</div>
+</div>
+
+
+<!-- PRE-BUILD SETUP -->
+<div class="section-div">
+  Pre-Build Setup
+  <span class="section-badge badge-setup">Do this first</span>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Workflow Settings</div>
+  <div class="setup-row"><div class="setup-key">Workflow Name</div><div>Post-Call Follow-Up Sequence</div></div>
+  <div class="setup-row"><div class="setup-key">Folder</div><div>FTF - Producer: Onboarding (create if doesn't exist)</div></div>
+  <div class="setup-row"><div class="setup-key">Status</div><div>Draft until fully built and tested → then Publish</div></div>
+  <div class="setup-row"><div class="setup-key">Allow Re-entry</div><div>OFF — producer should only run this sequence once</div></div>
+  <div class="setup-row"><div class="setup-key">Stop on Response</div><div>ON — stop if contact replies to any email or SMS</div></div>
+  <div class="setup-row"><div class="setup-key">Sender Name (Email)</div><div>AJ Richards</div></div>
+  <div class="setup-row"><div class="setup-key">Sender Email</div><div>aj@fromthefarm.org (or the GHL verified from address)</div></div>
+  <div class="setup-row"><div class="setup-key">SMS Sender</div><div>(866) 938-2038</div></div>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Tags — Create These Before You Start (if they don't exist)</div>
+  <ul class="checklist">
+    <li><code>attended-sunday-call</code> — added by Sunday Call sequence when producer attends</li>
+    <li><code>aj-called</code> — AJ manually adds this when he calls a producer and they're in</li>
+    <li><code>post-call-sequence-active</code> — add at start of this workflow, remove at exit (optional but useful for filtering)</li>
+  </ul>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Links — Copy These Exactly</div>
+  <div class="setup-row"><div class="setup-key">Store Setup</div><div><code class="link">https://farm.fromthefarm.org</code></div></div>
+  <div class="setup-row"><div class="setup-key">1-on-1 Booking</div><div><code class="link">https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb</code></div></div>
+  <div class="setup-row"><div class="setup-key">Recording Link</div><div><code>[Recording Link]</code> — placeholder. AJ provides each week. Leave as placeholder in template or use custom field.</div></div>
+  <div class="setup-row"><div class="setup-key">Skool (post-publish only)</div><div><code class="link">https://www.skool.com/from-the-farm-producers-5253/about</code> — NOT in this sequence. Goes in the post-publish workflow.</div></div>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Triggers — This Workflow Needs TWO Trigger Conditions (OR logic)</div>
+  <ul class="checklist">
+    <li><strong>Trigger 1:</strong> Tag Added → Tag = <code>attended-sunday-call</code></li>
+    <li><strong>Trigger 2:</strong> Tag Added → Tag = <code>aj-called</code></li>
+  </ul>
+  <div class="note">⚠ The no-show path (Path C) is handled inside this workflow via a branch. You don't need a separate trigger for no-shows — the Sunday Call sequence will enroll the producer into this workflow on Monday morning if they didn't attend. That enrollment fires without the <code>attended-sunday-call</code> tag, which the branch detects. See Step 1 below.</div>
+  <div style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
+    <strong>Alternative approach (simpler):</strong> Have the Sunday Call sequence enroll all producers into this workflow — both attendees (with tag) and no-shows (without tag). Then branch at Step 1.
+  </div>
+</div>
+
+
+<!-- NO-SHOW BRIDGE -->
+<div class="section-div">
+  Workflow Steps — No-Show Branch (Path C)
+  <span class="section-badge badge-noshow">Runs only if no attended-sunday-call tag</span>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-branch">1</div>
+    <div class="step-title">Branch — Did They Attend?</div>
+    <div class="step-type type-branch">IF/ELSE Branch</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>If/Else</em>
+    <br><br>
+    <strong>Condition:</strong> Contact has tag <code>attended-sunday-call</code> OR has tag <code>aj-called</code>
+    <br><br>
+    <div class="indent">
+      <strong>YES branch (attended or AJ-called):</strong> → Skip to Step 4 (Touch 1 — Welcome Email). Send immediately.<br><br>
+      <strong>NO branch (no-show):</strong> → Continue to Step 2 below.
+    </div>
+    <div class="note">⚠ In GHL, branches don't "jump" — structure the NO path to flow downward naturally, and end the NO path before Touch 1 fires. Alternatively, build no-show handling in a separate workflow and enroll from Sunday Call sequence separately. See bottom of doc for both approaches.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">2</div>
+    <div class="step-title">Wait — Until Monday Morning</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em>
+    <br><br>
+    <strong>Wait type:</strong> Wait until specific time<br>
+    <strong>Day:</strong> Monday<br>
+    <strong>Time:</strong> 9:00 AM (contact's local time, or Mountain Time if unavailable)<br><br>
+    <div class="note">If producer enrolled on Sunday night, this fires Monday morning. If enrolled earlier in the week, it waits until the following Monday.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-noshow">3</div>
+    <div class="step-title">No-Show Bridge Email — "Missed you Sunday"</div>
+    <div class="step-type type-email">Email</div>
+  </div>
+  <div class="step-body">
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">Missed you Sunday — here's the recording</div>
+
+    <div class="copy-label">Email Body (Personal / AJ's Voice)</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+We missed you on the call Sunday night — totally understand, life gets busy.
+
+I saved the recording so you don't miss out. It's about 45 minutes and covers everything: how the platform works, what producers are seeing, and what getting started actually looks like.
+
+[Watch the Recording →]
+
+After you've had a chance to watch, if you're ready to get started just click here:
+Start Building Your Store → https://farm.fromthefarm.org
+
+Or if you'd rather talk it through with me directly, grab some time here:
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+Either way, I'll be in touch.
+
+— AJ Richards, From The Farm</div>
+
+    <div class="note">⚑ [Watch the Recording →] is a placeholder. AJ provides the Zoom recording link each week. Either: (a) use a GHL custom field <code>{{contact.sunday_call_recording_url}}</code> that AJ updates each week, or (b) AJ updates this email template each Monday before 9am. Option (a) is cleaner.</div>
+    <div class="note-green">After this email sends: Add Wait → 1 Day → then flow into Touch 1 (Step 4). The no-show path merges into the main sequence at Touch 1.</div>
+  </div>
+</div>
+
+<div style="margin-left:20px;border-left:2px solid #fde68a;padding-left:16px;margin-bottom:16px;margin-top:-8px;">
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num num-wait">3B</div>
+      <div class="step-title">Wait — 1 Day (Tuesday)</div>
+      <div class="step-type type-wait">Wait</div>
+    </div>
+    <div class="step-body">
+      <strong>In GHL:</strong> Add action → <em>Wait</em> → 1 Day<br><br>
+      No-show path rests here (Tuesday). Touch 1 fires Wednesday. From Touch 1 onward, all three paths run identically.
+    </div>
+  </div>
+</div>
+
+
+<!-- MAIN SEQUENCE -->
+<div class="section-div">
+  Main Sequence — All Paths (A, B, C merge here)
+  <span class="section-badge badge-main">8 touches · 21 days</span>
+</div>
+
+<!-- TOUCH 1 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">4</div>
+    <div class="step-title">Touch 1 — Welcome &amp; First Step</div>
+    <div class="step-type type-email">Email · Immediately</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> Immediately (no wait before this step)<br>
+    <strong>From:</strong> AJ Richards
+
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">Really glad you're here</div>
+
+    <div class="copy-label">Email Body</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+I'm really glad you're looking into what we're building at From The Farm. The farmers who take the time to explore this are exactly the ones who do well on the platform.
+
+Here's what I'd love for you to do next: just start your producer profile. It takes about 10 minutes and it's the first real step toward getting your first order.
+
+Start Building Your Store → https://farm.fromthefarm.org
+
+Not quite ready? That's okay — grab some time on my calendar and we'll talk it through:
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+— AJ</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">5</div>
+    <div class="step-title">Wait — 1 Day</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 1 Day
+  </div>
+</div>
+
+<!-- TOUCH 2 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">6</div>
+    <div class="step-title">Touch 2 — Why This Matters</div>
+    <div class="step-type type-email">Email · Day 2</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 1 day wait (Day 2 from Touch 1)<br>
+    <strong>From:</strong> AJ Richards
+
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">Why I built this</div>
+
+    <div class="copy-label">Email Body</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+I want to tell you something about why From The Farm exists.
+
+I got tired of watching good farmers — people raising real food the right way — get squeezed out by a system that doesn't value what they do. The grocery store takes their margin. The processor takes their story. The customer never even knows their name.
+
+This platform flips that. Your farm, your price, your relationship with the customer. Direct.
+
+The families buying through FTF aren't just buying food — they're choosing you specifically. That's a different kind of business. And it's one you can build.
+
+{{contact.first_name}}, your store is waiting. Let's get it started.
+
+Start Building Your Store → https://farm.fromthefarm.org
+
+Rather talk it through first?
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+— AJ</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">7</div>
+    <div class="step-title">Wait — 1 Day</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 1 Day
+  </div>
+</div>
+
+<!-- TOUCH 3 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">8</div>
+    <div class="step-title">Touch 3 — Two-Door Close</div>
+    <div class="step-type type-sms">SMS · Day 3</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 1 day wait (Day 3 from Touch 1)
+
+    <div class="copy-label">SMS Copy</div>
+    <div class="copy-block sms">Hey {{contact.first_name}}, thanks again for hopping on the call. Ready to get started? farm.fromthefarm.org — or if you've got more questions, grab some time with me here: https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb</div>
+
+    <div class="note">SMS must be plain text — no HTML link formatting. Paste the full URLs directly. GHL will track clicks automatically. Character count: keep under 160 for single SMS segment. Split into 2 messages if needed.</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">9</div>
+    <div class="step-title">Wait — 5 Days</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 5 Days<br>
+    (Day 3 → Day 8)
+  </div>
+</div>
+
+<!-- TOUCH 4 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">10</div>
+    <div class="step-title">Touch 4 — Social Proof</div>
+    <div class="step-type type-email">Email · Day 8</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 5 day wait (Day 8 from Touch 1)<br>
+    <strong>From:</strong> AJ Richards
+
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">What other farmers are seeing</div>
+
+    <div class="copy-label">Email Body</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+We have over 100 farms live on the platform right now. Some of them were exactly where you are a few months ago — skeptical, busy, not sure if it was worth the time.
+
+What I keep hearing from them: the first order is the hardest. After that, it starts to compound. Customers come back. They tell their friends. A family in your area that buys from you once will buy from you for years if the experience is right.
+
+That's what we're building toward with every farm that joins.
+
+You'd be a good fit for this. I know that from our conversation.
+
+Start Building Your Store → https://farm.fromthefarm.org
+
+Rather talk it through first?
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+— AJ</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">11</div>
+    <div class="step-title">Wait — 3 Days</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 3 Days<br>
+    (Day 8 → Day 11)
+  </div>
+</div>
+
+<!-- TOUCH 5 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">12</div>
+    <div class="step-title">Touch 5 — Remove Friction</div>
+    <div class="step-type type-sms">SMS · Day 11</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 3 day wait (Day 11 from Touch 1)
+
+    <div class="copy-label">SMS Copy</div>
+    <div class="copy-block sms">Hey {{contact.first_name}}, AJ here. Getting your store set up is simpler than most people think — you just need a few product photos, your product list, and bank info for payouts. That's it. Start here: farm.fromthefarm.org — or if you'd rather talk it through: https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">13</div>
+    <div class="step-title">Wait — 3 Days</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 3 Days<br>
+    (Day 11 → Day 14)
+  </div>
+</div>
+
+<!-- TOUCH 6 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">14</div>
+    <div class="step-title">Touch 6 — Opportunity Cost</div>
+    <div class="step-type type-email">Email · Day 14</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 3 day wait (Day 14 from Touch 1)<br>
+    <strong>From:</strong> AJ Richards
+
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">Every week matters more than you think</div>
+
+    <div class="copy-label">Email Body</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+I don't want to pressure you — that's not what this is. But I do want to be honest with you.
+
+The farms who get set up in the first two weeks consistently outperform the ones who wait. Not because they're better farmers — because they started building their customer list earlier.
+
+Your area has families right now looking for exactly what you raise. They're on the platform. They just can't find you yet.
+
+Let's change that.
+
+Start Building Your Store → https://farm.fromthefarm.org
+
+Rather talk it through first?
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+— AJ</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">15</div>
+    <div class="step-title">Wait — 4 Days</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 4 Days<br>
+    (Day 14 → Day 18)
+  </div>
+</div>
+
+<!-- TOUCH 7 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">16</div>
+    <div class="step-title">Touch 7 — Personal Ask</div>
+    <div class="step-type type-sms">SMS · Day 18</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 4 day wait (Day 18 from Touch 1)
+
+    <div class="copy-label">SMS Copy</div>
+    <div class="copy-block sms">{{contact.first_name}} — AJ here. Just checking in. Is there something holding you up? Ready to start: farm.fromthefarm.org — or let's talk it through: https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb</div>
+  </div>
+</div>
+
+<!-- WAIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-wait">17</div>
+    <div class="step-title">Wait — 3 Days</div>
+    <div class="step-type type-wait">Wait</div>
+  </div>
+  <div class="step-body">
+    <strong>In GHL:</strong> Add action → <em>Wait</em> → 3 Days<br>
+    (Day 18 → Day 21)
+  </div>
+</div>
+
+<!-- TOUCH 8 -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-action">18</div>
+    <div class="step-title">Touch 8 — Final Email</div>
+    <div class="step-type type-email">Email · Day 21</div>
+  </div>
+  <div class="step-body">
+    <strong>Timing:</strong> After 3 day wait (Day 21 from Touch 1)<br>
+    <strong>From:</strong> AJ Richards
+
+    <div class="copy-label">Subject Line</div>
+    <div class="copy-block">Last note from me for a while</div>
+
+    <div class="copy-label">Email Body</div>
+    <div class="copy-block">Hey {{contact.first_name}},
+
+I'm going to give you some space after this — I know you've got a farm to run and I don't want to be noise in your inbox.
+
+But before I do, I want to say this one more time: I think you'd be great on this platform. And I think the families in your area would be lucky to find you.
+
+Whenever you're ready — whether that's today or six months from now — the door is always open.
+
+Start Building Your Store → https://farm.fromthefarm.org
+
+Or just reply to this email and we'll get you going together:
+Schedule a 1-on-1 Store Setup Call → https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb
+
+— AJ Richards, From The Farm</div>
+  </div>
+</div>
+
+<!-- END / EXIT -->
+<div class="step">
+  <div class="step-header">
+    <div class="step-num num-exit">19</div>
+    <div class="step-title">Workflow Ends</div>
+    <div class="step-type type-exit">End</div>
+  </div>
+  <div class="step-body">
+    The sequence is complete. No further actions.
+    <div class="note-green">If the producer still hasn't started their store after Day 21, they remain in GHL as a contact with the lead status. AJ can re-enroll them manually in a future re-engagement sequence if desired.</div>
+  </div>
+</div>
+
+
+<!-- EXIT CONDITION -->
+<div class="exit-box">
+  <div class="exit-label">Exit Condition — How to Remove Them Early</div>
+
+  A producer who starts their store must exit this sequence the moment they do. Here's how to set that up:<br><br>
+
+  <strong>Option A — Goal (Recommended):</strong><br>
+  In GHL workflow settings → <em>Goals</em> → Add a goal:<br>
+  <div style="margin:10px 0 10px 20px;font-family:monospace;font-size:12px;background:rgba(255,255,255,0.1);padding:10px 14px;border-radius:6px;">
+    Contact field: <code class="white">contact.producer__status</code><br>
+    Condition: equals <code class="white">Draft</code> OR equals <code class="white">In Review</code> OR equals <code class="white">Approved</code>
+  </div>
+  When the goal is met → the contact exits the workflow immediately and is enrolled in the <strong>Onboarding Setup sequence</strong>.<br><br>
+
+  <strong>Option B — Tag-Based:</strong><br>
+  If Option A isn't possible with your setup: AJ or the system adds tag <code class="white">store-setup-started</code> when a producer begins their profile → use a <em>Remove from Workflow</em> action in another workflow triggered by that tag.<br><br>
+
+  <strong>After Published:</strong><br>
+  Skool invite fires from the <em>Producer: Published</em> workflow (workflow #5 in your existing pipeline), NOT from this sequence. Open that workflow and add a <em>Send Email</em> action with the Skool link: <code class="white">https://www.skool.com/from-the-farm-producers-5253/about</code>
+</div>
+
+
+<!-- BUILD NOTES -->
+<div class="section-div" style="margin-top:40px;">
+  Build Notes &amp; Watch-Outs
+  <span class="section-badge badge-setup">Read before building</span>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Timing Reference — All Waits</div>
+  <div style="font-size:13px;line-height:1.9;">
+    <div style="display:grid;grid-template-columns:120px 80px 1fr;gap:4px 16px;font-size:12px;">
+      <div style="font-weight:700;color:#888;border-bottom:1px solid #e8e3dc;padding-bottom:4px;margin-bottom:4px;">Touch</div>
+      <div style="font-weight:700;color:#888;border-bottom:1px solid #e8e3dc;padding-bottom:4px;margin-bottom:4px;">Day</div>
+      <div style="font-weight:700;color:#888;border-bottom:1px solid #e8e3dc;padding-bottom:4px;margin-bottom:4px;">Wait Before This Step</div>
+      <div>No-Show Bridge</div><div>Monday</div><div>Wait until Monday 9am</div>
+      <div>+ Rest Day</div><div>Tuesday</div><div>Wait 1 day</div>
+      <div>Touch 1 (email)</div><div>Day 1</div><div>Immediately (no wait)</div>
+      <div>Touch 2 (email)</div><div>Day 2</div><div>Wait 1 day</div>
+      <div>Touch 3 (SMS)</div><div>Day 3</div><div>Wait 1 day</div>
+      <div>Touch 4 (email)</div><div>Day 8</div><div>Wait 5 days</div>
+      <div>Touch 5 (SMS)</div><div>Day 11</div><div>Wait 3 days</div>
+      <div>Touch 6 (email)</div><div>Day 14</div><div>Wait 3 days</div>
+      <div>Touch 7 (SMS)</div><div>Day 18</div><div>Wait 4 days</div>
+      <div>Touch 8 (email)</div><div>Day 21</div><div>Wait 3 days</div>
+    </div>
+  </div>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Common GHL Mistakes to Avoid</div>
+  <ul class="checklist">
+    <li>Don't use "Wait X days" when you mean "Wait until next Monday" — use the specific day/time wait for the no-show step.</li>
+    <li>SMS must be plain text — no HTML tags, no formatted links. Just paste the full URL.</li>
+    <li>GHL merges variable names with contact fields. Use <code>{{contact.first_name}}</code> — NOT <code>[First Name]</code> — in the actual GHL editor. The <code>[First Name]</code> in this doc is a placeholder for the variable.</li>
+    <li>Set "Allow Re-entry" to OFF. If a producer registers for multiple Sunday calls, they should not run this sequence twice.</li>
+    <li>Check "Stop on Response" is ON — if they reply to an email or SMS, the sequence should pause and AJ handles the conversation manually.</li>
+    <li>Emails are HTML in GHL — keep the formatting simple. Plain text style (no heavy headers or buttons needed — the copy is the conversion tool).</li>
+  </ul>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">No-Show Branch Architecture — Two Options</div>
+  <div style="font-size:13px;line-height:1.8;color:#444;">
+    <strong>Option A — Single Workflow (Recommended for simplicity):</strong><br>
+    One workflow, enrolled by Sunday Call sequence for everyone (attendees + no-shows). Branch at Step 1: attended → skip to Touch 1 immediately. No-show → wait until Monday → bridge email → wait 1 day → Touch 1.<br><br>
+    <strong>Option B — Two Separate Workflows:</strong><br>
+    Workflow 1: "Post-Call — Attended" — triggered by <code>attended-sunday-call</code> OR <code>aj-called</code> tag. Goes straight to Touch 1.<br>
+    Workflow 2: "Post-Call — No-Show" — triggered Monday by Sunday Call sequence if no <code>attended-sunday-call</code> tag. Sends bridge email → wait 1 day → enrolls into Workflow 1 at Touch 1.<br><br>
+    Option A is simpler to manage. Option B is cleaner if GHL's branching is difficult to configure.
+  </div>
+</div>
+
+<div class="setup-block">
+  <div class="setup-label">Recording Link — Weekly Process for AJ</div>
+  <div style="font-size:13px;line-height:1.8;color:#444;">
+    The No-Show Bridge email needs a recording link from the previous Sunday's call. Two ways to handle this:<br><br>
+    <strong>Option A (Manual, simple):</strong> AJ updates the No-Show Bridge email template in GHL each Monday morning with that week's Zoom recording link. Takes 2 minutes.<br><br>
+    <strong>Option B (Custom field):</strong> Create a GHL custom field <code>sunday_call_recording_url</code>. AJ or assistant updates the field each Monday. The email uses <code>{{contact.sunday_call_recording_url}}</code>. Cleaner but requires field setup.<br><br>
+    Either way, the workflow fires Monday at 9am — AJ needs to have the link ready before then.
+  </div>
+</div>
+
+</body>
+</html>
