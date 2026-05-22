@@ -432,9 +432,9 @@
     <span class="checklist-badge badge-ghl">GHL Setup</span>
   </div>
   <ul class="cl">
-    <li><input type="checkbox"> <span><strong>attended-sunday-call</strong> — confirm it exists or create it<span class="sub">Added by Sunday Call sequence when producer joins the call</span></span></li>
-    <li><input type="checkbox"> <span><strong>aj-called</strong> — confirm it exists or create it<span class="sub">AJ adds manually after every 1-on-1 call that results in enrollment</span></span></li>
-    <li><input type="checkbox"> <span><strong>missed-sunday-producer-call</strong> — create this (new)<span class="sub">Added Monday morning to anyone who registered but has no attended-sunday-call tag</span></span></li>
+    <li><input type="checkbox"> <span><strong>attended-sunday-call</strong> — confirm it exists or create it<span class="sub"><strong>How it gets added:</strong> GHL's native Zoom integration — when a contact attends the Sunday meeting, Zoom reports attendance to GHL and a workflow adds this tag automatically. Requires: Zoom connected to GHL + Sunday call set up as a Zoom Meeting or Webinar in GHL's calendar. <em>If AJ uses a regular Zoom Meeting (not Webinar), verify the integration supports attendance tracking — if not, AJ tags manually post-call.</em></span></span></li>
+    <li><input type="checkbox"> <span><strong>aj-called</strong> — confirm it exists or create it<span class="sub"><strong>How it gets added:</strong> AJ adds this manually in GHL immediately after a 1-on-1 call that results in enrollment. No automation — this is AJ's action. Takes 10 seconds in the contact record.</span></span></li>
+    <li><input type="checkbox"> <span><strong>missed-sunday-producer-call</strong> — create this (new)<span class="sub"><strong>How it gets added:</strong> Automated Monday morning workflow. Logic: contact has <code style="background:#f0ede8;padding:1px 5px;border-radius:3px;">registered-for-sunday-call</code> tag AND does NOT have <code style="background:#f0ede8;padding:1px 5px;border-radius:3px;">attended-sunday-call</code> tag → add <code style="background:#f0ede8;padding:1px 5px;border-radius:3px;">missed-sunday-producer-call</code> → enroll in Post-Call sequence. Standard GHL If/Else branch on a time-based trigger (Monday 9am).</span></span></li>
   </ul>
 </div>
 
