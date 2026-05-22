@@ -149,6 +149,57 @@
   code.dark { background: #f0ede8; color: #555; }
 
   a { color: #123559; font-weight: 700; }
+
+  /* CHECKLIST */
+  .checklist-section {
+    background: #fff;
+    border: 1.5px solid #e8e3dc;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  .checklist-section + .checklist-section { margin-top: 0; }
+  .checklist-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A9987A;
+    margin-bottom: 14px; padding-bottom: 10px;
+    border-bottom: 1.5px solid #f0ede8;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .checklist-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 10px;
+    border-radius: 12px; text-transform: none; letter-spacing: 0;
+  }
+  .badge-ghl { background: #ede9fe; color: #5b21b6; }
+  .badge-content { background: #dbeafe; color: #1e40af; }
+  .badge-build { background: #dcfce7; color: #166534; }
+  .badge-ops { background: #fef3c7; color: #92400e; }
+  .badge-blocker { background: #fee2e2; color: #991b1b; }
+  ul.cl {
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  ul.cl li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; line-height: 1.65;
+    padding: 6px 0;
+    border-bottom: 1px solid #f8f4ef;
+    color: #353337;
+  }
+  ul.cl li:last-child { border-bottom: none; }
+  ul.cl li input[type="checkbox"] {
+    margin-top: 3px; flex-shrink: 0;
+    width: 14px; height: 14px;
+    accent-color: #123559; cursor: pointer;
+  }
+  ul.cl li .sub {
+    font-size: 11px; color: #999; display: block; margin-top: 2px;
+  }
+  .cl-group-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #bbb;
+    margin: 14px 0 6px; padding-left: 24px;
+  }
 </style>
 </head>
 <body>
@@ -364,6 +415,119 @@
     Or just reply to this email and we'll get you going together: <a href="https://api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb">Schedule a 1-on-1 Store Setup Call →</a><br><br>
     — AJ Richards, From The Farm
   </div>
+</div>
+
+
+<!-- BUILD CHECKLIST -->
+<div class="section-divider" style="margin-top:56px;">
+  Build Checklist — Everything Needed to Launch
+  <span class="section-badge badge-main">Check off as you go</span>
+</div>
+
+<!-- TAGS -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    Tags — Create in GHL
+    <span class="checklist-badge badge-ghl">GHL Setup</span>
+  </div>
+  <ul class="cl">
+    <li><input type="checkbox"> <span><strong>attended-sunday-call</strong> — confirm it exists or create it<span class="sub">Added by Sunday Call sequence when producer joins the call</span></span></li>
+    <li><input type="checkbox"> <span><strong>aj-called</strong> — confirm it exists or create it<span class="sub">AJ adds manually after every 1-on-1 call that results in enrollment</span></span></li>
+    <li><input type="checkbox"> <span><strong>missed-sunday-producer-call</strong> — create this (new)<span class="sub">Added Monday morning to anyone who registered but has no attended-sunday-call tag</span></span></li>
+  </ul>
+</div>
+
+<!-- SUNDAY CALL UPDATES -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    Sunday Call Sequence — Updates Needed
+    <span class="checklist-badge badge-ghl">GHL Setup</span>
+  </div>
+  <ul class="cl">
+    <li><input type="checkbox"> <span>Add action to tag <strong>attended-sunday-call</strong> when a producer joins the call<span class="sub">Likely triggered by Zoom attendance webhook or manual tag by AJ post-call</span></span></li>
+    <li><input type="checkbox"> <span>Add Monday morning check: registered but no <strong>attended-sunday-call</strong> → add <strong>missed-sunday-producer-call</strong> → enroll in Post-Call sequence<span class="sub">Wait until Monday condition + If/Else branch on tag presence</span></span></li>
+    <li><input type="checkbox"> <span>Add Path B: <strong>aj-called</strong> tag added → remove from Sunday sequence → enroll in Post-Call sequence immediately</span></li>
+  </ul>
+</div>
+
+<!-- WORKFLOW BUILD -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    Post-Call Workflow — Build in GHL
+    <span class="checklist-badge badge-build">Workflow Builder</span>
+  </div>
+  <div class="cl-group-label">Settings</div>
+  <ul class="cl">
+    <li><input type="checkbox"> Set 3 triggers: <strong>attended-sunday-call</strong> / <strong>aj-called</strong> / <strong>missed-sunday-producer-call</strong></li>
+    <li><input type="checkbox"> Allow Re-entry → <strong>OFF</strong></li>
+    <li><input type="checkbox"> Stop on Response → <strong>ON</strong></li>
+    <li><input type="checkbox"> Sender name: <strong>AJ Richards</strong> · Sender email: <strong>aj@fromthefarm.org</strong></li>
+    <li><input type="checkbox"> SMS sender: <strong>(866) 938-2038</strong></li>
+  </ul>
+  <div class="cl-group-label">No-Show Bridge (Path C only)</div>
+  <ul class="cl">
+    <li><input type="checkbox"> Branch: if <strong>missed-sunday-producer-call</strong> tag → send No-Show Bridge email → wait 1 day → continue to Touch 1</li>
+    <li><input type="checkbox"> No-Show Bridge email copy pasted in (subject: "Missed you Sunday — here's the recording")</li>
+  </ul>
+  <div class="cl-group-label">Main Sequence</div>
+  <ul class="cl">
+    <li><input type="checkbox"> Touch 1 — Email · Immediately · "Really glad you're here"</li>
+    <li><input type="checkbox"> Wait 1 day</li>
+    <li><input type="checkbox"> Touch 2 — Email · Day 2 · "Why I built this"</li>
+    <li><input type="checkbox"> Wait 1 day</li>
+    <li><input type="checkbox"> Touch 3 — SMS · Day 3 · Two-door close</li>
+    <li><input type="checkbox"> Wait 5 days</li>
+    <li><input type="checkbox"> Touch 4 — Email · Day 8 · "What other farmers are seeing"</li>
+    <li><input type="checkbox"> Wait 3 days</li>
+    <li><input type="checkbox"> Touch 5 — SMS · Day 11 · Remove friction</li>
+    <li><input type="checkbox"> Wait 3 days</li>
+    <li><input type="checkbox"> Touch 6 — Email · Day 14 · "Every week matters more than you think"</li>
+    <li><input type="checkbox"> Wait 4 days</li>
+    <li><input type="checkbox"> Touch 7 — SMS · Day 18 · Personal check-in</li>
+    <li><input type="checkbox"> Wait 3 days</li>
+    <li><input type="checkbox"> Touch 8 — Email · Day 21 · "Last note from me for a while"</li>
+  </ul>
+  <div class="cl-group-label">Exit Condition</div>
+  <ul class="cl">
+    <li><input type="checkbox"> Set Goal: producer status = <strong>Draft</strong> or <strong>In Review</strong> → exit sequence → enroll in Onboarding Setup sequence</li>
+  </ul>
+</div>
+
+<!-- CONTENT -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    Content — Confirm Before Launch
+    <span class="checklist-badge badge-content">Content</span>
+  </div>
+  <ul class="cl">
+    <li><input type="checkbox"> <span>Recording link process confirmed — AJ saves Zoom recording and updates No-Show Bridge email (or custom field) <strong>before Monday 9am each week</strong></span></li>
+    <li><input type="checkbox"> Booking link live and routing to AJ's calendar: <strong>api.leadconnectorhq.com/widget/booking/0L2zUWmTlhgfKKZw4Wfb</strong></li>
+    <li><input type="checkbox"> Store setup URL live: <strong>farm.fromthefarm.org</strong></li>
+  </ul>
+</div>
+
+<!-- DOWNSTREAM -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    Downstream Sequences — Don't Exist Yet
+    <span class="checklist-badge badge-blocker">Blockers</span>
+  </div>
+  <ul class="cl">
+    <li><input type="checkbox"> <span><strong>Onboarding Setup sequence</strong> — fires when producer starts building their store (status = Draft/In Review)<span class="sub">Currently a dead end. Must exist before this sequence can properly exit.</span></span></li>
+    <li><input type="checkbox"> <span><strong>Post-publish Skool invite</strong> — confirm this exists in the Producer: Published workflow or build it<span class="sub">Link: skool.com/from-the-farm-producers-5253/about</span></span></li>
+  </ul>
+</div>
+
+<!-- AJ OPS -->
+<div class="checklist-section">
+  <div class="checklist-title">
+    AJ's Process — Operational Habits
+    <span class="checklist-badge badge-ops">AJ Action</span>
+  </div>
+  <ul class="cl">
+    <li><input type="checkbox"> AJ adds <strong>aj-called</strong> tag in GHL immediately after every 1-on-1 call that results in enrollment</li>
+    <li><input type="checkbox"> AJ saves Zoom recording each Sunday night and has the link ready before Monday 9am</li>
+  </ul>
 </div>
 
 
